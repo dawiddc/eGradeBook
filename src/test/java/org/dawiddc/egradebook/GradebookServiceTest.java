@@ -1,5 +1,6 @@
 package org.dawiddc.egradebook;
 
+import org.dawiddc.egradebook.model.Student;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
@@ -7,7 +8,10 @@ import org.junit.Test;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import java.util.Collections;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,6 +57,40 @@ public class GradebookServiceTest {
     public void getStudentGradeHttp200() {
         int response = target.path("/students/0/grades/0").request().get().getStatus();
         assertEquals(200, response);
+    }
+
+    @Test
+    public void createStudentGradeHttp200() {
+        Student student = new Student.StudentBuilder().index()
+                .firstName("John")
+                .lastName("Tester")
+                .birthday(new Date("1999/02/02"))
+                .grades(Collections.emptyList()).build();
+        int response = target.path("/students").request().post(Entity.json(student)).getStatus();
+        assertEquals(201, response);
+    }
+
+    @Test
+    public void updateStudentHttp200() {
+        Student student = new Student.StudentBuilder().index()
+                .firstName("John")
+                .lastName("Tester")
+                .birthday(new Date("1999/02/02"))
+                .grades(Collections.emptyList()).build();
+        int response = target.path("/students/0").request().put(Entity.json(student)).getStatus();
+        assertEquals(200, response);
+    }
+
+    @Test
+    public void deleteStudentHttp200() {
+        int response = target.path("/students/0").request().delete().getStatus();
+        assertEquals(200, response);
+    }
+
+    @Test
+    public void deleteStudentHttp204() {
+        int response = target.path("/students/123").request().delete().getStatus();
+        assertEquals(204, response);
     }
 
 //    @Test
