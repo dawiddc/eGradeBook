@@ -11,16 +11,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.UUID;
 
 @Path("/")
-@Produces({MediaType.APPLICATION_XML})
 public class GradebookService {
 
     private final List<Student> studentsList = MockModel.getInstance();
 
     @GET
     @Path("/students")
+    @Produces({MediaType.APPLICATION_XML})
     public List<Student> getStudentList() {
 
         return studentsList;
@@ -28,22 +27,37 @@ public class GradebookService {
 
     @GET
     @Path("/students/{index}")
-    public Student getStudent(@PathParam("index") int index) {
-
+    @Produces({MediaType.APPLICATION_XML})
+    public Student getStudent(@PathParam("index") long index) {
+        for (Student student : studentsList) {
+            if (student.getIndex() == index)
+                return student;
+        }
         return null;
     }
 
     @GET
     @Path("/students/{index}/grades")
-    public List<Grade> getStudentGrades() {
-
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Grade> getStudentGrades(@PathParam("index") long index) {
+        for (Student student : studentsList) {
+            if (student.getIndex() == index)
+                return student.getGrades();
+        }
         return null;
     }
 
     @GET
     @Path("/students/{index}/grades/{id}")
-    public Grade getStudentGrade(@PathParam("id") UUID id) {
+    @Produces({MediaType.APPLICATION_XML})
+    public Grade getStudentGrade(@PathParam("index") long index, @PathParam("id") long id) {
+        for (Student student : studentsList) {
+            if (student.getIndex() == index)
+                for (Grade grade : student.getGrades())
+                    if (grade.getId() == id)
+                        return grade;
 
+        }
         return null;
     }
 
@@ -56,10 +70,10 @@ public class GradebookService {
 
     @GET
     @Path("/courses/{id}")
-    public Course getCourse(@PathParam("id") UUID id) {
+    public Course getCourse(@PathParam("id") long id) {
 
         return null;
     }
 
 
- }
+}

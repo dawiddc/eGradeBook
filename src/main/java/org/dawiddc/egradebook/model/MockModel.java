@@ -8,35 +8,87 @@ public class MockModel {
     private static final List<Student> studentsList = new ArrayList<>();
 
     static {
+        List<Grade> grades = new ArrayList<>();
+        grades.add(
+                new Grade.GradeBuilder().id()
+                        .value(4)
+                        .date(new Date("2018/04/06"))
+                        .course(new Course.CourseBuilder().id().name("Math").lecturer("Matt Jepard").build())
+                        .build()
+        );
+        grades.add(
+                new Grade.GradeBuilder().id()
+                        .value(5)
+                        .date(new Date("2018/04/04"))
+                        .course(new Course.CourseBuilder().id().name("TPSI").lecturer("Tomasz Pawlak").build())
+                        .build()
+        );
+        studentsList.add(
+                new Student.StudentBuilder().index()
+                        .birthday(new Date("1995/07/23"))
+                        .firstName("John")
+                        .lastName("Doe")
+                        .grades(grades)
+                        .build()
+        );
 
-        Student student1 = new Student();
-        student1.setBirthday(new Date("23-07-1995"));
-        student1.setFirstName("John");
-        student1.setLastName("Doe");
-        Grade grade1 = new Grade();
-        grade1.setDate(new Date("12-03-1789"));
-        Grade grade2 = new Grade();
-        Grade grade3 = new Grade();
-        Grade grade4 = new Grade();
-        student1.setGrades(new ArrayList<Grade>() {new Grade(), new Grade()});
+        grades = new ArrayList<>();
 
-        Student student2 = new Student();
-        student2.setBirthday(new Date("16-03-1993"));
-        student2.setFirstName("Matt");
-        student2.setLastName("Truckerson");
-        student2.setGrades(new ArrayList<Grade>() {new Grade(), new Grade()});
+        grades.add(
+                new Grade.GradeBuilder().id()
+                        .value((float) 3.5)
+                        .date(new Date("2018/04/02"))
+                        .course(new Course.CourseBuilder().id().name("TPAL").lecturer("Adam Kotarski").build())
+                        .build()
+        );
+        grades.add(
+                new Grade.GradeBuilder().id()
+                        .value((float) 4.5)
+                        .date(new Date("2018/04/01"))
+                        .course(new Course.CourseBuilder().id().name("ABCD").lecturer("Jett Mall").build())
+                        .build()
+        );
 
-        Student student3 = new Student();
-        student3.setBirthday(new Date("10-09-1998"));
-        student3.setFirstName("Jane");
-        student3.setLastName("Dove");
-        student3.setGrades(new ArrayList<Grade>() {new Grade(), new Grade()});
+        studentsList.add(
+                new Student.StudentBuilder().index()
+                        .birthday(new Date("1994/02/13"))
+                        .firstName("John")
+                        .lastName("Doe")
+                        .grades(grades)
+                        .build()
+        );
 
-        studentsList.add(student1);
+        grades = new ArrayList<>();
+
+        grades.add(
+                new Grade.GradeBuilder().id()
+                        .value((float) 4)
+                        .date(new Date("2018/04/04"))
+                        .course(new Course.CourseBuilder().id().name("TWO").lecturer("Andrzej Zarcha").build())
+                        .build()
+        );
+        grades.add(
+                new Grade.GradeBuilder().id()
+                        .value((float) 4.5)
+                        .date(new Date("2018/04/05"))
+                        .course(new Course.CourseBuilder().id().name("English").lecturer("Olivia Bolton").build())
+                        .build()
+        );
+
+        studentsList.add(
+                new Student.StudentBuilder().index()
+                        .birthday(new Date("1992/11/30"))
+                        .firstName("John")
+                        .lastName("Doe")
+                        .grades(grades)
+                        .build()
+        );
 
     }
 
-    public static List<Student> getInstance(){
+    private MockModel() {}
+
+    public static List<Student> getInstance() {
         return studentsList;
     }
 }
