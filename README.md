@@ -1,4 +1,7 @@
 # eGradeBook
+
+[![Build Status](https://travis-ci.org/dawiddc/eGradeBook.svg?branch=master)](https://travis-ci.org/dawiddc/eGradeBook)
+
 RESTful eGradebook project
 
 
