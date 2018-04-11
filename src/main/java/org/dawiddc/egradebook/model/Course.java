@@ -23,21 +23,13 @@ public class Course {
     public Course() {
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLecturer(String lecturer) {
-        this.lecturer = lecturer;
-    }
-
     @XmlAttribute
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @XmlElement
@@ -45,9 +37,17 @@ public class Course {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @XmlElement
     public String getLecturer() {
         return lecturer;
+    }
+
+    public void setLecturer(String lecturer) {
+        this.lecturer = lecturer;
     }
 
     public static class CourseBuilder {

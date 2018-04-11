@@ -78,7 +78,7 @@ public class Student {
         private String firstName;
         private String lastName;
         private Date birthday;
-        
+
         private List<Grade> grades;
 
         public StudentBuilder firstName(String firstName) {
