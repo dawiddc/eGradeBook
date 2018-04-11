@@ -123,7 +123,7 @@ public class GradebookServiceTest {
                 .date(new Date("2018/04/05"))
                 .course(new Course.CourseBuilder().name("Anatomy").lecturer("Joey Tribbiani").build())
                 .build();
-        int response = target.path("/students/0/grades/0").request().put(Entity.json(grade)).getStatus();
+        int response = target.path("/students/1/grades/0").request().put(Entity.json(grade)).getStatus();
         assertThat(response, Matchers.either(Matchers.is(201)).or(Matchers.is(204)));
     }
 
