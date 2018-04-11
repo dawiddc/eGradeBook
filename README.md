@@ -1,6 +1,7 @@
 # eGradeBook
 
 [![Build Status](https://travis-ci.org/dawiddc/eGradeBook.svg?branch=master)](https://travis-ci.org/dawiddc/eGradeBook)
+[![codecov](https://codecov.io/gh/dawiddc/eGradeBook/branch/master/graph/badge.svg)](https://codecov.io/gh/dawiddc/eGradeBook)
 
 RESTful eGradebook project
 
