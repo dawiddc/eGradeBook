@@ -16,12 +16,23 @@ public class Course {
     private String lecturer;
 
     private Course(CourseBuilder builder) {
-        this.id = builder.id;
         this.name = builder.name;
         this.lecturer = builder.lecturer;
     }
 
     public Course() {
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLecturer(String lecturer) {
+        this.lecturer = lecturer;
     }
 
     @XmlAttribute
@@ -40,14 +51,8 @@ public class Course {
     }
 
     public static class CourseBuilder {
-        private long id;
         private String name;
         private String lecturer;
-
-        public CourseBuilder id() {
-            this.id = Course.idCounter.getAndIncrement();
-            return this;
-        }
 
         public CourseBuilder name(String name) {
             this.name = name;

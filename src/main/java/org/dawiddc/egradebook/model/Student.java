@@ -20,7 +20,6 @@ public class Student {
     private List<Grade> grades;
 
     private Student(StudentBuilder builder) {
-        this.index = builder.index;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.birthday = builder.birthday;
@@ -35,9 +34,17 @@ public class Student {
         return index;
     }
 
+    public void setIndex(long index) {
+        this.index = index;
+    }
+
     @XmlElement
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     @XmlElement
@@ -45,9 +52,17 @@ public class Student {
         return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @XmlElement
     public Date getBirthday() {
         return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     @XmlElement
@@ -55,17 +70,16 @@ public class Student {
         return grades;
     }
 
+    public void setGrades(List<Grade> grades) {
+        this.grades = grades;
+    }
+
     public static class StudentBuilder {
-        private long index;
         private String firstName;
         private String lastName;
         private Date birthday;
+        
         private List<Grade> grades;
-
-        public StudentBuilder index() {
-            this.index = Student.idCounter.getAndIncrement();
-            return this;
-        }
 
         public StudentBuilder firstName(String firstName) {
             this.firstName = firstName;

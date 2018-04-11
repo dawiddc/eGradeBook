@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @XmlType(propOrder = {"id", "course", "value", "date"})
 public class Grade {
 
-    private static AtomicLong idCounter = new AtomicLong();
+    private static final AtomicLong idCounter = new AtomicLong();
     private long id;
     private float value;
     private Date date;
@@ -32,9 +32,17 @@ public class Grade {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @XmlElement
     public float getValue() {
         return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
     }
 
     @XmlElement
@@ -42,9 +50,18 @@ public class Grade {
         return date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @XmlElement
     public Course getCourse() {
         return course;
+    }
+
+    public void setCourse(Course course) {
+        GradebookDataService.getInstance().addCourse(course);
+        this.course = course;
     }
 
     public static class GradeBuilder {
@@ -70,6 +87,7 @@ public class Grade {
 
         public GradeBuilder course(Course course) {
             this.course = course;
+            GradebookDataService.getInstance().addCourse(course);
             return this;
         }
 
