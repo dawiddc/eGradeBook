@@ -21,6 +21,19 @@ public class GradebookDataService {
     public long addStudent(Student student) {
         long index = studentIdCounter.getAndIncrement();
         student.setIndex(index);
+        for (Grade grade : student.getGrades()) {
+            long id = gradeIdCounter.getAndIncrement();
+            grade.setId(id);
+            boolean alreadyExists = false;
+            for (Course existingCourse : coursesList) {
+                if (existingCourse.getName().equals(grade.getCourse().getName())) {
+                    grade.getCourse().setId(existingCourse.getId());
+                    alreadyExists = true;
+                }
+            }
+            if (!alreadyExists)
+                grade.getCourse().setId(courseIdCounter.getAndIncrement());
+        }
         studentsList.add(student);
         return index;
     }
@@ -67,80 +80,62 @@ public class GradebookDataService {
     }
 
     public void createMockModel() {
-        List<Grade> grades = new ArrayList<>();
-        grades.add(
-                new Grade.GradeBuilder().id()
-                        .value(4)
-                        .date(new Date("2018/04/06"))
-                        .course(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").build())
-                        .build()
-        );
-        grades.add(
-                new Grade.GradeBuilder().id()
-                        .value(5)
-                        .date(new Date("2018/04/04"))
-                        .course(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").build())
-                        .build()
-        );
+        /* Student 0 */
         addStudent(
                 new Student.StudentBuilder()
                         .birthday(new Date("1995/07/23"))
                         .firstName("John")
                         .lastName("Doe")
-                        .grades(grades)
+                        .grades(new ArrayList<>())
                         .build()
         );
-
-        grades = new ArrayList<>();
-
-        grades.add(
-                new Grade.GradeBuilder().id()
-                        .value((float) 3.5)
-                        .date(new Date("2018/04/02"))
-                        .course(new Course.CourseBuilder().name("TPAL").lecturer("Adam Kotarski").build())
-                        .build()
-        );
-        grades.add(
-                new Grade.GradeBuilder().id()
-                        .value((float) 4.5)
-                        .date(new Date("2018/04/01"))
-                        .course(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").build())
-                        .build()
-        );
-
+        addGrade(0, new Grade.GradeBuilder()
+                .value(5)
+                .date(new Date("2018/04/04"))
+                .course(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").build())
+                .build());
+        addGrade(0, new Grade.GradeBuilder()
+                .value(4)
+                .date(new Date("2018/04/06"))
+                .course(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").build())
+                .build());
+        /* Student 1 */
         addStudent(
                 new Student.StudentBuilder()
                         .birthday(new Date("1994/02/13"))
                         .firstName("Diane")
                         .lastName("Pittsburg")
-                        .grades(grades)
+                        .grades(new ArrayList<>())
                         .build()
         );
-
-        grades = new ArrayList<>();
-
-        grades.add(
-                new Grade.GradeBuilder().id()
-                        .value((float) 4)
-                        .date(new Date("2018/04/04"))
-                        .course(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").build())
-                        .build()
-        );
-        grades.add(
-                new Grade.GradeBuilder().id()
-                        .value((float) 4.5)
-                        .date(new Date("2018/04/05"))
-                        .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").build())
-                        .build()
-        );
-
+        addGrade(1, new Grade.GradeBuilder()
+                .value((float) 3.5)
+                .date(new Date("2018/04/02"))
+                .course(new Course.CourseBuilder().name("TPAL").lecturer("Adam Kotarski").build())
+                .build());
+        addGrade(1, new Grade.GradeBuilder()
+                .value((float) 4.5)
+                .date(new Date("2018/04/01"))
+                .course(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").build())
+                .build());
+        /* Student 2 */
         addStudent(
                 new Student.StudentBuilder()
                         .birthday(new Date("1992/11/30"))
                         .firstName("Matthew")
                         .lastName("Pettigrew")
-                        .grades(grades)
+                        .grades(new ArrayList<>())
                         .build()
         );
+        addGrade(2, new Grade.GradeBuilder()
+                .value((float) 4)
+                .date(new Date("2018/04/04"))
+                .course(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").build())
+                .build());
+        addGrade(2, new Grade.GradeBuilder()
+                .value((float) 4.5)
+                .date(new Date("2018/04/05"))
+                .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").build())
+                .build());
     }
 }

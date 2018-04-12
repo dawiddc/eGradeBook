@@ -5,20 +5,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicLong;
 
 @XmlRootElement(name = "grade")
 @XmlType(propOrder = {"id", "course", "value", "date"})
 public class Grade {
 
-    private static final AtomicLong idCounter = new AtomicLong();
     private long id;
     private float value;
     private Date date;
     private Course course;
 
     private Grade(GradeBuilder builder) {
-        this.id = builder.id;
         this.value = builder.value;
         this.date = builder.date;
         this.course = builder.course;
@@ -65,15 +62,9 @@ public class Grade {
     }
 
     public static class GradeBuilder {
-        private long id;
         private float value;
         private Date date;
         private Course course;
-
-        public GradeBuilder id() {
-            this.id = Grade.idCounter.getAndIncrement();
-            return this;
-        }
 
         public GradeBuilder value(float value) {
             this.value = value;

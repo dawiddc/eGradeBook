@@ -156,7 +156,7 @@ public class GradebookRESTService {
             dataService.getGradesList(index).set(matchIndex, grade);
             return Response.status(Response.Status.NO_CONTENT).build();
         } else {
-            dataService.getGradesList(index).add(grade);
+            dataService.addGrade(index, grade);
             return Response.status(Response.Status.CREATED).build();
         }
     }

@@ -19,7 +19,7 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class GradebookServiceTest {
+public class GradebookRESTServiceTest {
     private HttpServer server;
     private WebTarget target;
 
@@ -150,5 +150,11 @@ public class GradebookServiceTest {
     public void deleteCourseHttp204() {
         int response = target.path("/courses/0").request().delete().getStatus();
         assertEquals(204, response);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowNotFoundException() {
+        GradebookRESTService service = new GradebookRESTService();
+        service.getStudent(999);
     }
 }

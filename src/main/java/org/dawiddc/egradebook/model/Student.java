@@ -6,13 +6,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @XmlRootElement(name = "student")
 @XmlType(propOrder = {"index", "firstName", "lastName", "birthday", "grades"})
 public class Student {
 
-    private static AtomicLong idCounter = new AtomicLong();
     private long index;
     private String firstName;
     private String lastName;
