@@ -20,6 +20,11 @@ public class GradebookDataService {
 
     public long addStudent(Student student) {
         long index = studentIdCounter.getAndIncrement();
+        for (Student existingStudent : studentsList) {
+            if (existingStudent.getIndex() == index) {
+                return addStudent(student);
+            }
+        }
         student.setIndex(index);
         for (Grade grade : student.getGrades()) {
             long id = gradeIdCounter.getAndIncrement();

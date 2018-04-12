@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+
 @Path("/")
 public class GradebookRESTService {
 
@@ -81,16 +82,21 @@ public class GradebookRESTService {
 
     @POST
     @Path("/students")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response postStudent(Student student) {
-        dataService.addStudent(student);
+        String createdIndex = String.valueOf(dataService.addStudent(student));
 
+        //TODO: change to response.created()
+        // return Response.created(("www.localhost:8080/students " + createdIndex)).build();
         return Response.status(Response.Status.CREATED).build();
     }
 
     @POST
     @Path("/students/{index}/grades")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response postGrade(@PathParam("index") long index, Grade grade) {
         if (dataService.addGrade(index, grade) != null)
+            //TODO: change to response.created()
             return Response.status(Response.Status.CREATED).build();
         else
             throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
@@ -98,14 +104,16 @@ public class GradebookRESTService {
 
     @POST
     @Path("/courses")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response postCourse(Course course) {
         dataService.addCourse(course);
-
+        //TODO: change to response.created()
         return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
     @Path("/students/{index}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateStudent(@PathParam("index") long index, Student student) {
         int matchIndex;
         Optional<Student> match = studentsList.stream()
@@ -117,20 +125,27 @@ public class GradebookRESTService {
             studentsList.set(matchIndex, student);
             return Response.status(Response.Status.NO_CONTENT).build();
         } else {
-            studentsList.add(student);
-            return Response.status(Response.Status.CREATED).build();
+            try {
+                student.setIndex(index);
+                studentsList.add(student);
+                return Response.status(Response.Status.CREATED).build();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
     @PUT
     @Path("/courses/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateCourse(@PathParam("id") long id, Course course) {
         int matchIndex;
         Optional<Course> match = dataService.getCoursesList().stream()
                 .filter(c -> c.getId() == course.getId())
                 .findFirst();
         if (match.isPresent()) {
-            matchIndex = studentsList.indexOf(match.get());
+            matchIndex = dataService.getCoursesList().indexOf(match.get());
             course.setId(id);
             dataService.getCoursesList().set(matchIndex, course);
             return Response.status(Response.Status.NO_CONTENT).build();
@@ -142,6 +157,7 @@ public class GradebookRESTService {
 
     @PUT
     @Path("/students/{index}/grades/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateGrade(@PathParam("index") long index, @PathParam("id") long id, Grade grade) {
         if (dataService.getGradesList(index) == null)
             throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
