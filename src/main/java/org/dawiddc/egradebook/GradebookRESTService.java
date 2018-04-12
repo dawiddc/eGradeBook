@@ -8,6 +8,8 @@ import org.dawiddc.egradebook.model.Student;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -86,19 +88,32 @@ public class GradebookRESTService {
     public Response postStudent(Student student) {
         String createdIndex = String.valueOf(dataService.addStudent(student));
 
-        //TODO: change to response.created()
-        // return Response.created(("www.localhost:8080/students " + createdIndex)).build();
-        return Response.status(Response.Status.CREATED).build();
+        String stringUri = "www.localhost:8080/students/" + createdIndex;
+        URI url = null;
+        try {
+            url = new URI(stringUri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return Response.created(url).build();
+        // return Response.status(Response.Status.CREATED).build();
     }
 
     @POST
     @Path("/students/{index}/grades")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response postGrade(@PathParam("index") long index, Grade grade) {
-        if (dataService.addGrade(index, grade) != null)
-            //TODO: change to response.created()
-            return Response.status(Response.Status.CREATED).build();
-        else
+        Long createdIndex = dataService.addGrade(index, grade);
+        if (createdIndex != null) {
+            String stringUri = "www.localhost:8080/students/" + index + "/grades/" + createdIndex;
+            URI url = null;
+            try {
+                url = new URI(stringUri);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            return Response.created(url).build();
+        } else
             throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
     }
 
@@ -106,9 +121,15 @@ public class GradebookRESTService {
     @Path("/courses")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response postCourse(Course course) {
-        dataService.addCourse(course);
-        //TODO: change to response.created()
-        return Response.status(Response.Status.CREATED).build();
+        long createdIndex = dataService.addCourse(course);
+        String stringUri = "www.localhost:8080/courses/" + createdIndex;
+        URI url = null;
+        try {
+            url = new URI(stringUri);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return Response.created(url).build();
     }
 
     @PUT
@@ -125,14 +146,9 @@ public class GradebookRESTService {
             studentsList.set(matchIndex, student);
             return Response.status(Response.Status.NO_CONTENT).build();
         } else {
-            try {
-                student.setIndex(index);
-                studentsList.add(student);
-                return Response.status(Response.Status.CREATED).build();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+            student.setIndex(index);
+            studentsList.add(student);
+            return Response.status(Response.Status.CREATED).build();
         }
     }
 
