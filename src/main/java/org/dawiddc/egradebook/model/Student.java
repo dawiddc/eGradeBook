@@ -1,16 +1,18 @@
 package org.dawiddc.egradebook.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 import java.util.List;
 
 @XmlRootElement(name = "student")
-@XmlType(propOrder = {"index", "firstName", "lastName", "birthday", "grades"})
+@XmlType(propOrder = {"index", "firstName", "lastName", "birthday", "grades", "links"})
 public class Student {
 
     private long index;
@@ -19,6 +21,10 @@ public class Student {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date birthday;
     private List<Grade> grades;
+    @InjectLinks({
+            @InjectLink(resource = Student.class, rel = "self")
+    })
+    private List<Link> links;
 
     private Student(StudentBuilder builder) {
         this.firstName = builder.firstName;
@@ -28,6 +34,18 @@ public class Student {
     }
 
     public Student() {
+    }
+
+    @XmlElement(name = "link")
+    @XmlElementWrapper(name = "links")
+    @JsonProperty("links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    private List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
     }
 
     @XmlAttribute
@@ -40,7 +58,7 @@ public class Student {
     }
 
     @XmlElement
-    public String getFirstName() {
+    private String getFirstName() {
         return firstName;
     }
 
@@ -49,7 +67,7 @@ public class Student {
     }
 
     @XmlElement
-    public String getLastName() {
+    private String getLastName() {
         return lastName;
     }
 
@@ -58,7 +76,7 @@ public class Student {
     }
 
     @XmlElement
-    public Date getBirthday() {
+    private Date getBirthday() {
         return birthday;
     }
 
@@ -66,7 +84,9 @@ public class Student {
         this.birthday = birthday;
     }
 
-    @XmlElement
+    @XmlElement(name = "grade")
+    @XmlElementWrapper(name = "grades")
+    @JsonProperty("grades")
     public List<Grade> getGrades() {
         return grades;
     }

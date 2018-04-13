@@ -4,6 +4,7 @@ import org.dawiddc.egradebook.model.Course;
 import org.dawiddc.egradebook.model.Grade;
 import org.dawiddc.egradebook.model.Student;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+@SuppressWarnings("deprecation")
 public class GradebookRESTServiceTest {
     private HttpServer server;
     private WebTarget target;
@@ -28,8 +30,8 @@ public class GradebookRESTServiceTest {
         server = Main.startServer();
 
         Client c = ClientBuilder.newClient();
+        c.register(HttpAuthenticationFeature.basic("lecturer", "password"));
         target = c.target(Main.BASE_URI);
-
 //        RestAssured.baseURI = "http://localhost";
 //        RestAssured.port = 8080;
     }

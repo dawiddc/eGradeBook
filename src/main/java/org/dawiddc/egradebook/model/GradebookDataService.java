@@ -5,14 +5,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+@SuppressWarnings("deprecation")
 public class GradebookDataService {
 
     private static final AtomicLong gradeIdCounter = new AtomicLong();
-    private static GradebookDataService ourInstance = new GradebookDataService();
-    private static AtomicLong studentIdCounter = new AtomicLong();
-    private static AtomicLong courseIdCounter = new AtomicLong();
-    private List<Student> studentsList = new ArrayList<>();
-    private List<Course> coursesList = new ArrayList<>();
+    private static final GradebookDataService ourInstance = new GradebookDataService();
+    private static final AtomicLong studentIdCounter = new AtomicLong();
+    private static final AtomicLong courseIdCounter = new AtomicLong();
+    private final List<Student> studentsList = new ArrayList<>();
+    private final List<Course> coursesList = new ArrayList<>();
 
     public static GradebookDataService getInstance() {
         return ourInstance;

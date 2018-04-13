@@ -5,17 +5,22 @@ import org.dawiddc.egradebook.model.Grade;
 import org.dawiddc.egradebook.model.GradebookDataService;
 import org.dawiddc.egradebook.model.Student;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 
 @Path("/")
+@PermitAll
 public class GradebookRESTService {
 
     private final GradebookDataService dataService = GradebookDataService.getInstance();
@@ -40,6 +45,7 @@ public class GradebookRESTService {
         throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
     }
 
+    @RolesAllowed("lecturer")
     @GET
     @Path("/students/{index}/grades")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -82,6 +88,7 @@ public class GradebookRESTService {
         throw new NotFoundException(new JsonError("Error", "Course " + String.valueOf(id) + " not found"));
     }
 
+    @RolesAllowed("lecturer")
     @POST
     @Path("/students")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -95,10 +102,12 @@ public class GradebookRESTService {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        Collections.sort(studentsList, Comparator.comparingLong(Student::getIndex));
         return Response.created(url).build();
         // return Response.status(Response.Status.CREATED).build();
     }
 
+    @RolesAllowed("lecturer")
     @POST
     @Path("/students/{index}/grades")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -117,6 +126,7 @@ public class GradebookRESTService {
             throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
     }
 
+    @RolesAllowed("lecturer")
     @POST
     @Path("/courses")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -132,6 +142,7 @@ public class GradebookRESTService {
         return Response.created(url).build();
     }
 
+    @RolesAllowed("lecturer")
     @PUT
     @Path("/students/{index}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -144,14 +155,17 @@ public class GradebookRESTService {
             matchIndex = studentsList.indexOf(match.get());
             student.setIndex(index);
             studentsList.set(matchIndex, student);
+            Collections.sort(studentsList, Comparator.comparingLong(Student::getIndex));
             return Response.status(Response.Status.NO_CONTENT).build();
         } else {
             student.setIndex(index);
             studentsList.add(student);
+            Collections.sort(studentsList, Comparator.comparingLong(Student::getIndex));
             return Response.status(Response.Status.CREATED).build();
         }
     }
 
+    @RolesAllowed("lecturer")
     @PUT
     @Path("/courses/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -171,6 +185,7 @@ public class GradebookRESTService {
         }
     }
 
+    @RolesAllowed("lecturer")
     @PUT
     @Path("/students/{index}/grades/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -193,15 +208,17 @@ public class GradebookRESTService {
         }
     }
 
+    @RolesAllowed("lecturer")
     @DELETE
     @Path("/students/{index}")
     public Response deleteStudent(@PathParam("index") long index) {
         Predicate<Student> student = s -> s.getIndex() == index;
         studentsList.removeIf(student);
-
+        
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @RolesAllowed("lecturer")
     @DELETE
     @Path("/courses/{id}")
     public Response deleteCourse(@PathParam("id") long id) {
@@ -211,6 +228,7 @@ public class GradebookRESTService {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @RolesAllowed("lecturer")
     @DELETE
     @Path("/students/{index}/grades/{id}")
     public Response deleteGrade(@PathParam("index") long index, @PathParam("id") long id) {

@@ -1,15 +1,18 @@
 package org.dawiddc.egradebook.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
+import java.util.List;
 
 @XmlRootElement(name = "grade")
-@XmlType(propOrder = {"id", "course", "value", "date"})
+@XmlType(propOrder = {"id", "course", "value", "date", "links"})
 public class Grade {
 
     private long id;
@@ -17,6 +20,10 @@ public class Grade {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date date;
     private Course course;
+    @InjectLinks({
+            @InjectLink(resource = Grade.class, rel = "self")
+    })
+    private List<Link> links;
 
     private Grade(GradeBuilder builder) {
         this.value = builder.value;
@@ -25,6 +32,14 @@ public class Grade {
     }
 
     public Grade() {
+    }
+
+    @XmlElement(name = "link")
+    @XmlElementWrapper(name = "links")
+    @JsonProperty("links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    private List<Link> getLinks() {
+        return links;
     }
 
     @XmlAttribute
@@ -37,7 +52,7 @@ public class Grade {
     }
 
     @XmlElement
-    public float getValue() {
+    private float getValue() {
         return value;
     }
 
@@ -46,7 +61,7 @@ public class Grade {
     }
 
     @XmlElement
-    public Date getDate() {
+    private Date getDate() {
         return date;
     }
 

@@ -1,8 +1,8 @@
 package org.dawiddc.egradebook;
 
-public class JsonError {
+class JsonError {
     private final String type;
-    private String message;
+    private final String message;
 
     public JsonError(String type, String message) {
         this.type = type;

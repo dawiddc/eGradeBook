@@ -1,26 +1,42 @@
 package org.dawiddc.egradebook.model;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import java.util.concurrent.atomic.AtomicLong;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.glassfish.jersey.linking.InjectLink;
+import org.glassfish.jersey.linking.InjectLinks;
 
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.List;
+
+@SuppressWarnings("unused")
 @XmlRootElement(name = "course")
-@XmlType(propOrder = {"id", "name", "lecturer"})
+@XmlType(propOrder = {"id", "name", "lecturer", "links"})
 public class Course {
 
-    private static AtomicLong idCounter = new AtomicLong();
     private long id;
     private String name;
     private String lecturer;
+    @InjectLinks({
+            @InjectLink(resource = Course.class, rel = "self")
+    })
+    private List<Link> links;
 
     private Course(CourseBuilder builder) {
         this.name = builder.name;
         this.lecturer = builder.lecturer;
     }
 
+
     public Course() {
+    }
+
+    @XmlElement(name = "link")
+    @XmlElementWrapper(name = "links")
+    @JsonProperty("links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
+    public List<Link> getLinks() {
+        return links;
     }
 
     @XmlAttribute
@@ -42,7 +58,7 @@ public class Course {
     }
 
     @XmlElement
-    public String getLecturer() {
+    private String getLecturer() {
         return lecturer;
     }
 
