@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/dawiddc/eGradeBook.svg?branch=master)](https://travis-ci.org/dawiddc/eGradeBook)
 [![codecov](https://codecov.io/gh/dawiddc/eGradeBook/branch/master/graph/badge.svg)](https://codecov.io/gh/dawiddc/eGradeBook)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.dawiddc.egradebook%3Aegradebook&metric=alert_status)](https://sonarcloud.io/dashboard/index/org.dawiddc.egradebook%3Aegradebook)
 
 RESTful eGradebook project
 
