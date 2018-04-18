@@ -18,8 +18,13 @@ public class Course {
     private String name;
     private String lecturer;
     @InjectLinks({
-            @InjectLink(resource = Course.class, rel = "self")
+            @InjectLink(value = "/courses/{id}", rel = "self"),
+            @InjectLink(value = "/courses", rel = "parent")
     })
+    @XmlElement(name = "link")
+    @XmlElementWrapper(name = "links")
+    @JsonProperty("links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
 
     private Course(CourseBuilder builder) {
@@ -29,14 +34,6 @@ public class Course {
 
 
     public Course() {
-    }
-
-    @XmlElement(name = "link")
-    @XmlElementWrapper(name = "links")
-    @JsonProperty("links")
-    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    public List<Link> getLinks() {
-        return links;
     }
 
     @XmlAttribute

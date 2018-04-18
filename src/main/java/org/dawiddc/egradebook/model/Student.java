@@ -22,8 +22,14 @@ public class Student {
     private Date birthday;
     private List<Grade> grades;
     @InjectLinks({
-            @InjectLink(resource = Student.class, rel = "self")
+            @InjectLink(value = "/students/{index}", rel = "self"),
+            @InjectLink(value = "/students", rel = "parent"),
+            @InjectLink(value = "/students/{index}/grades", rel = "grades")
     })
+    @XmlElement(name = "link")
+    @XmlElementWrapper(name = "links")
+    @JsonProperty("links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
 
     private Student(StudentBuilder builder) {
@@ -33,20 +39,7 @@ public class Student {
         this.grades = builder.grades;
     }
 
-    public Student() {
-    }
-
-    @XmlElement(name = "link")
-    @XmlElementWrapper(name = "links")
-    @JsonProperty("links")
-    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    private List<Link> getLinks() {
-        return links;
-    }
-
-    public void setLinks(List<Link> links) {
-        this.links = links;
-    }
+    public Student() { }
 
     @XmlAttribute
     public long getIndex() {

@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +29,6 @@ public class GradebookRESTService {
     @Path("/students")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Student> getStudentList() {
-
         return studentsList;
     }
 
@@ -42,7 +40,7 @@ public class GradebookRESTService {
             if (student.getIndex() == index)
                 return student;
         }
-        throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
+        throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
     }
 
     @RolesAllowed("lecturer")
@@ -53,7 +51,7 @@ public class GradebookRESTService {
         if (dataService.getGradesList(index) != null)
             return dataService.getGradesList(index);
         else
-            throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
+            throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
     }
 
     @GET
@@ -65,9 +63,9 @@ public class GradebookRESTService {
                 if (grade.getId() == id)
                     return grade;
             }
-            throw new NotFoundException(new JsonError("Error", "Grade " + String.valueOf(id) + " not found"));
+            throw new NotFoundException(new JsonError("Error", "Grade " + id + " not found"));
         } else
-            throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
+            throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
     }
 
     @GET
@@ -85,7 +83,7 @@ public class GradebookRESTService {
             if (course.getId() == id)
                 return course;
         }
-        throw new NotFoundException(new JsonError("Error", "Course " + String.valueOf(id) + " not found"));
+        throw new NotFoundException(new JsonError("Error", "Course " + id + " not found"));
     }
 
     @RolesAllowed("lecturer")
@@ -102,9 +100,8 @@ public class GradebookRESTService {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        Collections.sort(studentsList, Comparator.comparingLong(Student::getIndex));
+        studentsList.sort(Comparator.comparingLong(Student::getIndex));
         return Response.created(url).build();
-        // return Response.status(Response.Status.CREATED).build();
     }
 
     @RolesAllowed("lecturer")
@@ -123,7 +120,7 @@ public class GradebookRESTService {
             }
             return Response.created(url).build();
         } else
-            throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
+            throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
     }
 
     @RolesAllowed("lecturer")
@@ -155,12 +152,12 @@ public class GradebookRESTService {
             matchIndex = studentsList.indexOf(match.get());
             student.setIndex(index);
             studentsList.set(matchIndex, student);
-            Collections.sort(studentsList, Comparator.comparingLong(Student::getIndex));
+            studentsList.sort(Comparator.comparingLong(Student::getIndex));
             return Response.status(Response.Status.NO_CONTENT).build();
         } else {
             student.setIndex(index);
             studentsList.add(student);
-            Collections.sort(studentsList, Comparator.comparingLong(Student::getIndex));
+            studentsList.sort(Comparator.comparingLong(Student::getIndex));
             return Response.status(Response.Status.CREATED).build();
         }
     }
@@ -191,7 +188,7 @@ public class GradebookRESTService {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateGrade(@PathParam("index") long index, @PathParam("id") long id, Grade grade) {
         if (dataService.getGradesList(index) == null)
-            throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
+            throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
 
         int matchIndex;
         Optional<Grade> match = dataService.getGradesList(index).stream()
@@ -214,7 +211,7 @@ public class GradebookRESTService {
     public Response deleteStudent(@PathParam("index") long index) {
         Predicate<Student> student = s -> s.getIndex() == index;
         studentsList.removeIf(student);
-        
+
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -237,6 +234,6 @@ public class GradebookRESTService {
             dataService.getGradesList(index).removeIf(grade);
             return Response.status(Response.Status.NO_CONTENT).build();
         }
-        throw new NotFoundException(new JsonError("Error", "Student " + String.valueOf(index) + " not found"));
+        throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
     }
 }

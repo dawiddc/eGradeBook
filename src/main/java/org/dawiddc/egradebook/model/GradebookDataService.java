@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-@SuppressWarnings("deprecation")
 public class GradebookDataService {
 
     private static final AtomicLong gradeIdCounter = new AtomicLong();
@@ -53,6 +52,7 @@ public class GradebookDataService {
         for (Student student : studentsList) {
             if (student.getIndex() == index) {
                 grade.setId(id);
+                grade.setStudentOwnerIndex(index);
                 student.getGrades().add(grade);
                 return id;
             }

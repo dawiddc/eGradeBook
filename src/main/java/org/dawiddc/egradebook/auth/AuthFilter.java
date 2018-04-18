@@ -14,14 +14,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.Charset;
 import java.security.Principal;
 
-/**
- * Simple authentication filter.
- * <p>
- * Returns response with http status 401 when proper authentication is not provided in incoming request.
- *
- * @author Dawid Ciok
- * @see ContainerRequestFilter
- */
 @Provider
 @PreMatching
 public class AuthFilter implements ContainerRequestFilter {
@@ -71,12 +63,7 @@ public class AuthFilter implements ContainerRequestFilter {
 
         Authorizer(final User user) {
             this.user = user;
-            this.principal = new Principal() {
-
-                public String getName() {
-                    return user.username;
-                }
-            };
+            this.principal = () -> user.username;
         }
 
         public Principal getUserPrincipal() {

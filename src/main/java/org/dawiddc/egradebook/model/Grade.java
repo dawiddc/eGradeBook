@@ -21,9 +21,15 @@ public class Grade {
     private Date date;
     private Course course;
     @InjectLinks({
-            @InjectLink(resource = Grade.class, rel = "self")
+            @InjectLink(value = "students/{studentOwnerIndex}/grades", rel = "parent"),
+            @InjectLink(value = "students/{studentOwnerIndex}/grades/{id}", rel = "self")
     })
+    @XmlElement(name = "link")
+    @XmlElementWrapper(name = "links")
+    @JsonProperty("links")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
+    private long studentOwnerIndex;
 
     private Grade(GradeBuilder builder) {
         this.value = builder.value;
@@ -31,16 +37,7 @@ public class Grade {
         this.course = builder.course;
     }
 
-    public Grade() {
-    }
-
-    @XmlElement(name = "link")
-    @XmlElementWrapper(name = "links")
-    @JsonProperty("links")
-    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    private List<Link> getLinks() {
-        return links;
-    }
+    public Grade() { }
 
     @XmlAttribute
     public long getId() {
@@ -77,6 +74,15 @@ public class Grade {
     public void setCourse(Course course) {
         GradebookDataService.getInstance().addCourse(course);
         this.course = course;
+    }
+
+    @XmlTransient
+    public long getStudentOwnerIndex() {
+        return studentOwnerIndex;
+    }
+
+    public void setStudentOwnerIndex(long studentOwnerIndex) {
+        this.studentOwnerIndex = studentOwnerIndex;
     }
 
     public static class GradeBuilder {
