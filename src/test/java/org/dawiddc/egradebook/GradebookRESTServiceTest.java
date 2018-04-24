@@ -1,8 +1,10 @@
 package org.dawiddc.egradebook;
 
+import org.dawiddc.egradebook.exception.NotFoundException;
 import org.dawiddc.egradebook.model.Course;
 import org.dawiddc.egradebook.model.Grade;
 import org.dawiddc.egradebook.model.Student;
+import org.dawiddc.egradebook.resources.StudentResource;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.hamcrest.Matchers;
@@ -156,7 +158,7 @@ public class GradebookRESTServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void shouldThrowNotFoundException() {
-        GradebookRESTService service = new GradebookRESTService();
-        service.getStudent(999);
+        StudentResource studentResource = new StudentResource();
+        studentResource.getStudent(999);
     }
 }

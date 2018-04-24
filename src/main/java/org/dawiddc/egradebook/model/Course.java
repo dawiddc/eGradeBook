@@ -1,18 +1,27 @@
 package org.dawiddc.egradebook.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bson.types.ObjectId;
+import org.dawiddc.egradebook.utils.ObjectIdJaxbAdapter;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
+@Entity("courses")
 @SuppressWarnings("unused")
 @XmlRootElement(name = "course")
 @XmlType(propOrder = {"id", "name", "lecturer", "links"})
 public class Course {
+
+    @Id
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId objectId;
 
     private long id;
     private String name;

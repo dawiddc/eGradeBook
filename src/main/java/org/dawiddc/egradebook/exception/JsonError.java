@@ -1,6 +1,6 @@
-package org.dawiddc.egradebook;
+package org.dawiddc.egradebook.exception;
 
-class JsonError {
+public class JsonError {
     private final String type;
     private final String message;
 
