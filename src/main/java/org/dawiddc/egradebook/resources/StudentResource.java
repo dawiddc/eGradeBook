@@ -35,9 +35,9 @@ public class StudentResource {
     @GET
     @Path("/{index}")
     public Student getStudent(@PathParam("index") long index) {
-        for (Student student : studentsList) {
-            if (student.getIndex() == index)
-                return student;
+        Optional<Student> matchingStudent = studentsList.stream().filter(s -> s.getIndex() == index).findFirst();
+        if (matchingStudent.isPresent()) {
+            return matchingStudent.get();
         }
         throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
     }

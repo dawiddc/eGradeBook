@@ -16,13 +16,20 @@ class Main {
     public static final String BASE_URI = "http://localhost:8080/";
 
     public static HttpServer startServer() {
+
         final ResourceConfig rc = new ResourceConfig()
                 .packages("org.dawiddc.egradebook")
                 .packages("org.glassfish.jersey.examples.linking")
-                .register(DeclarativeLinkingFeature.class)
-                .register(RestError.class)
-                .registerClasses(AuthFilter.class);
+                .registerClasses(
+                        DeclarativeLinkingFeature.class,
+                        RestError.class,
+                        AuthFilter.class);
         /* Create inital model objects */
+//        try {
+//            InitializeDatabase.initializeStudents();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         GradebookDataService.getInstance().createMockModel();
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

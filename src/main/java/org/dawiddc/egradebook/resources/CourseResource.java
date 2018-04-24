@@ -32,9 +32,10 @@ public class CourseResource {
     @GET
     @Path("/{id}")
     public Course getCourse(@PathParam("id") long id) {
-        for (Course course : dataService.getCoursesList()) {
-            if (course.getId() == id)
-                return course;
+        Optional<Course> courseMatch = dataService.getCoursesList().stream()
+                .filter(c -> c.getId() == id).findFirst();
+        if (courseMatch.isPresent()) {
+            return courseMatch.get();
         }
         throw new NotFoundException(new JsonError("Error", "Course " + id + " not found"));
     }

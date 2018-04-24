@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Embedded;
 
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
@@ -11,6 +12,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 import java.util.List;
 
+@Embedded
 @XmlRootElement(name = "grade")
 @XmlType(propOrder = {"id", "course", "value", "date", "links"})
 public class Grade {

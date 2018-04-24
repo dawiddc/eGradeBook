@@ -54,9 +54,10 @@ public class GradeResource {
     @Path("/{id}")
     public Grade getStudentGrade(@PathParam("index") long index, @PathParam("id") long id) {
         if (dataService.getGradesList(index) != null) {
-            for (Grade grade : dataService.getGradesList(index)) {
-                if (grade.getId() == id)
-                    return grade;
+            Optional<Grade> gradeMatch = dataService.getGradesList(index).stream()
+                    .filter(g -> g.getId() == id).findFirst();
+            if (gradeMatch.isPresent()) {
+                return gradeMatch.get();
             }
             throw new NotFoundException(new JsonError("Error", "Grade " + id + " not found"));
         } else
