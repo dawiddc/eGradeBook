@@ -5,8 +5,9 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 public class DatastoreHandler {
-    private static DatastoreHandler Instance = new DatastoreHandler();
-    private Datastore datastore;
+
+    private static DatastoreHandler ds = new DatastoreHandler();
+    private static Datastore datastore;
 
     private DatastoreHandler() {
         final Morphia morphia = new Morphia();
@@ -15,11 +16,7 @@ public class DatastoreHandler {
         datastore.ensureIndexes();
     }
 
-    public static DatastoreHandler getInstance() {
-        return Instance;
-    }
-
-    public Datastore getDatastore() {
+    public static Datastore getDatastore() {
         return datastore;
     }
 }

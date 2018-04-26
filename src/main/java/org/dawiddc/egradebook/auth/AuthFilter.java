@@ -55,8 +55,8 @@ public class AuthFilter implements ContainerRequestFilter {
         }
         return user;
     }
-
     class Authorizer implements SecurityContext {
+
 
         private final User user;
         private final Principal principal;

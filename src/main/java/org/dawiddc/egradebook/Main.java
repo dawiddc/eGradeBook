@@ -25,11 +25,6 @@ class Main {
                         RestError.class,
                         AuthFilter.class);
         /* Create inital model objects */
-//        try {
-//            InitializeDatabase.initializeStudents();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         GradebookDataService.getInstance().createMockModel();
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

@@ -19,10 +19,10 @@ import java.util.List;
 @XmlType(propOrder = {"id", "name", "lecturer", "links"})
 public class Course {
 
+
     @Id
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId objectId;
-
     private long id;
     private String name;
     private String lecturer;

@@ -1,5 +1,8 @@
 package org.dawiddc.egradebook.model;
 
+import org.dawiddc.egradebook.utils.DatastoreHandler;
+import org.mongodb.morphia.Datastore;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,10 +16,11 @@ public class GradebookDataService {
     private static final AtomicLong courseIdCounter = new AtomicLong();
     private final List<Student> studentsList = new ArrayList<>();
     private final List<Course> coursesList = new ArrayList<>();
-
     public static GradebookDataService getInstance() {
         return ourInstance;
     }
+
+    private Datastore datastore = DatastoreHandler.getDatastore();
 
     public long addStudent(Student student) {
         long index = studentIdCounter.getAndIncrement();
@@ -143,5 +147,9 @@ public class GradebookDataService {
                 .date(new Date("2018/04/05"))
                 .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").build())
                 .build());
+
+        datastore.save(studentsList);
     }
+
+
 }

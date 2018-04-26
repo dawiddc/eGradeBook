@@ -27,7 +27,6 @@ public class Student {
     @NotNull
     private String firstName;
     @NotNull
-
     private String lastName;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
