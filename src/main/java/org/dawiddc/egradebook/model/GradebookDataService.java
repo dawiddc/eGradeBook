@@ -16,11 +16,11 @@ public class GradebookDataService {
     private static final AtomicLong courseIdCounter = new AtomicLong();
     private final List<Student> studentsList = new ArrayList<>();
     private final List<Course> coursesList = new ArrayList<>();
+    private Datastore datastore = DatastoreHandler.getDatastore();
+
     public static GradebookDataService getInstance() {
         return ourInstance;
     }
-
-    private Datastore datastore = DatastoreHandler.getDatastore();
 
     public long addStudent(Student student) {
         long index = studentIdCounter.getAndIncrement();
@@ -90,65 +90,67 @@ public class GradebookDataService {
     }
 
     public void createMockModel() {
-        /* Student 0 */
-        addStudent(
-                new Student.StudentBuilder()
-                        .birthday(new Date("1995/07/23"))
-                        .firstName("John")
-                        .lastName("Doe")
-                        .grades(new ArrayList<>())
-                        .build()
-        );
-        addGrade(0, new Grade.GradeBuilder()
-                .value(5)
-                .date(new Date("2018/04/04"))
-                .course(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").build())
-                .build());
-        addGrade(0, new Grade.GradeBuilder()
-                .value(4)
-                .date(new Date("2018/04/06"))
-                .course(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").build())
-                .build());
-        /* Student 1 */
-        addStudent(
-                new Student.StudentBuilder()
-                        .birthday(new Date("1994/02/13"))
-                        .firstName("Diane")
-                        .lastName("Pittsburg")
-                        .grades(new ArrayList<>())
-                        .build()
-        );
-        addGrade(1, new Grade.GradeBuilder()
-                .value((float) 3.5)
-                .date(new Date("2018/04/02"))
-                .course(new Course.CourseBuilder().name("TPAL").lecturer("Adam Kotarski").build())
-                .build());
-        addGrade(1, new Grade.GradeBuilder()
-                .value((float) 4.5)
-                .date(new Date("2018/04/01"))
-                .course(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").build())
-                .build());
-        /* Student 2 */
-        addStudent(
-                new Student.StudentBuilder()
-                        .birthday(new Date("1992/11/30"))
-                        .firstName("Matthew")
-                        .lastName("Pettigrew")
-                        .grades(new ArrayList<>())
-                        .build()
-        );
-        addGrade(2, new Grade.GradeBuilder()
-                .value((float) 4)
-                .date(new Date("2018/04/04"))
-                .course(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").build())
-                .build());
-        addGrade(2, new Grade.GradeBuilder()
-                .value((float) 4.5)
-                .date(new Date("2018/04/05"))
-                .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").build())
-                .build());
+        if (datastore.getCount(studentsList) < 1) {
+            /* Student 0 */
+            addStudent(
+                    new Student.StudentBuilder()
+                            .birthday(new Date("1995/07/23"))
+                            .firstName("John")
+                            .lastName("Doe")
+                            .grades(new ArrayList<>())
+                            .build()
+            );
+            addGrade(0, new Grade.GradeBuilder()
+                    .value(5)
+                    .date(new Date("2018/04/04"))
+                    .course(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").build())
+                    .build());
+            addGrade(0, new Grade.GradeBuilder()
+                    .value(4)
+                    .date(new Date("2018/04/06"))
+                    .course(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").build())
+                    .build());
+            /* Student 1 */
+            addStudent(
+                    new Student.StudentBuilder()
+                            .birthday(new Date("1994/02/13"))
+                            .firstName("Diane")
+                            .lastName("Pittsburg")
+                            .grades(new ArrayList<>())
+                            .build()
+            );
+            addGrade(1, new Grade.GradeBuilder()
+                    .value((float) 3.5)
+                    .date(new Date("2018/04/02"))
+                    .course(new Course.CourseBuilder().name("TPAL").lecturer("Adam Kotarski").build())
+                    .build());
+            addGrade(1, new Grade.GradeBuilder()
+                    .value((float) 4.5)
+                    .date(new Date("2018/04/01"))
+                    .course(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").build())
+                    .build());
+            /* Student 2 */
+            addStudent(
+                    new Student.StudentBuilder()
+                            .birthday(new Date("1992/11/30"))
+                            .firstName("Matthew")
+                            .lastName("Pettigrew")
+                            .grades(new ArrayList<>())
+                            .build()
+            );
+            addGrade(2, new Grade.GradeBuilder()
+                    .value((float) 4)
+                    .date(new Date("2018/04/04"))
+                    .course(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").build())
+                    .build());
+            addGrade(2, new Grade.GradeBuilder()
+                    .value((float) 4.5)
+                    .date(new Date("2018/04/05"))
+                    .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").build())
+                    .build());
 
-        datastore.save(studentsList);
+            datastore.save(studentsList);
+        }
     }
 
 
