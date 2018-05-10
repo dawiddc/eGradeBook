@@ -1,6 +1,6 @@
 package org.dawiddc.egradebook.model;
 
-import org.dawiddc.egradebook.utils.DatastoreHandler;
+import org.dawiddc.egradebook.utils.MorphiaDatastore;
 import org.mongodb.morphia.Datastore;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class GradebookDataService {
     private static final AtomicLong courseIdCounter = new AtomicLong();
     private final List<Student> studentsList = new ArrayList<>();
     private final List<Course> coursesList = new ArrayList<>();
-    private Datastore datastore = DatastoreHandler.getDatastore();
+    private Datastore datastore = MorphiaDatastore.getDatastore();
 
     public static GradebookDataService getInstance() {
         return ourInstance;

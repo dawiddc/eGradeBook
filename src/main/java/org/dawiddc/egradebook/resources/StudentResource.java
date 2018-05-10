@@ -1,5 +1,6 @@
 package org.dawiddc.egradebook.resources;
 
+import org.dawiddc.egradebook.dbservice.StudentDBService;
 import org.dawiddc.egradebook.exception.JsonError;
 import org.dawiddc.egradebook.exception.NotFoundException;
 import org.dawiddc.egradebook.model.GradebookDataService;
@@ -7,6 +8,7 @@ import org.dawiddc.egradebook.model.Student;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,27 +28,28 @@ public class StudentResource {
     private final GradebookDataService dataService = GradebookDataService.getInstance();
     private final List<Student> studentsList = dataService.getStudentsList();
 
-
     @GET
     public List<Student> getStudentList() {
-        return studentsList;
+        List<Student> students = StudentDBService.getAllStudents();
+        if (!(students == null || students.size() == 0))
+            return students;
+        throw new NotFoundException(new JsonError("Error", "Student list is empty"));
     }
 
     @GET
     @Path("/{index}")
     public Student getStudent(@PathParam("index") long index) {
-        Optional<Student> matchingStudent = studentsList.stream().filter(s -> s.getIndex() == index).findFirst();
-        if (matchingStudent.isPresent()) {
-            return matchingStudent.get();
+        Student student = StudentDBService.getStudent(index);
+        if (student != null) {
+            return student;
         }
         throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
     }
 
     @RolesAllowed("lecturer")
     @POST
-    public Response postStudent(Student student) {
-        String createdIndex = String.valueOf(dataService.addStudent(student));
-
+    public Response postStudent(@NotNull Student student) {
+        String createdIndex = String.valueOf(StudentDBService.addStudent(student));
         String stringUri = "www.localhost:8080/students/" + createdIndex;
         URI url = null;
         try {
@@ -54,14 +57,14 @@ public class StudentResource {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        studentsList.sort(Comparator.comparingLong(Student::getIndex));
+
         return Response.created(url).build();
     }
 
     @PUT
     @Path("/{index}")
     @RolesAllowed("lecturer")
-    public Response updateStudent(@PathParam("index") long index, Student student) {
+    public Response updateStudent(@PathParam("index") long index, @NotNull Student student) {
         int matchIndex;
         Optional<Student> match = studentsList.stream()
                 .filter(s -> s.getIndex() == index)

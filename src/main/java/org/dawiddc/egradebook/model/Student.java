@@ -74,7 +74,7 @@ public class Student {
     }
 
     @XmlElement
-    private String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
@@ -83,7 +83,7 @@ public class Student {
     }
 
     @XmlElement
-    private String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
@@ -92,7 +92,7 @@ public class Student {
     }
 
     @XmlElement
-    private Date getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
