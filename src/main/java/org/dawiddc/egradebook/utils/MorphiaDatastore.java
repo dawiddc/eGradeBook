@@ -6,7 +6,6 @@ import org.mongodb.morphia.Morphia;
 
 public class MorphiaDatastore {
 
-    private static MorphiaDatastore ds = new MorphiaDatastore();
     private static Datastore datastore;
 
     private MorphiaDatastore() {
@@ -17,6 +16,9 @@ public class MorphiaDatastore {
     }
 
     public static Datastore getDatastore() {
+        if (datastore == null) {
+            new MorphiaDatastore();
+        }
         return datastore;
     }
 }

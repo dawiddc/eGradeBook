@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
+import org.mongodb.morphia.annotations.Embedded;
 
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
@@ -11,16 +12,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 import java.util.List;
 
-//@Embedded
+@Embedded
 @XmlRootElement(name = "grade")
 @XmlType(propOrder = {"id", "course", "value", "date", "links"})
 public class Grade {
-
-    private long id;
-    private float value;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
-    private Date date;
-    private Course course;
     @InjectLinks({
             @InjectLink(value = "students/{studentOwnerIndex}/grades", rel = "parent"),
             @InjectLink(value = "students/{studentOwnerIndex}/grades/{id}", rel = "self")
@@ -30,6 +25,13 @@ public class Grade {
     @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
+
+    private long id;
+    private float value;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
+    private Date date;
+    private Course course;
+
     private long studentOwnerIndex;
 
     private Grade(GradeBuilder builder) {
@@ -50,7 +52,7 @@ public class Grade {
     }
 
     @XmlElement
-    private float getValue() {
+    public float getValue() {
         return value;
     }
 
@@ -59,7 +61,7 @@ public class Grade {
     }
 
     @XmlElement
-    private Date getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -73,7 +75,6 @@ public class Grade {
     }
 
     public void setCourse(Course course) {
-        GradebookDataService.getInstance().addCourse(course);
         this.course = course;
     }
 
@@ -103,7 +104,6 @@ public class Grade {
 
         public GradeBuilder course(Course course) {
             this.course = course;
-            GradebookDataService.getInstance().addCourse(course);
             return this;
         }
 

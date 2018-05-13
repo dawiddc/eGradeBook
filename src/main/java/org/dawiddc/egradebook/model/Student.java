@@ -21,17 +21,6 @@ import java.util.List;
 @XmlRootElement(name = "student")
 @XmlType(propOrder = {"index", "firstName", "lastName", "birthday", "grades", "links"})
 public class Student {
-
-    @Indexed(name = "index", unique = true)
-    private long index;
-    @NotNull
-    private String firstName;
-    @NotNull
-    private String lastName;
-    @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
-    private Date birthday;
-    private List<Grade> grades;
     @InjectLinks({
             @InjectLink(value = "/students/{index}", rel = "self"),
             @InjectLink(value = "/students", rel = "parent"),
@@ -42,9 +31,24 @@ public class Student {
     @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
+
     @Id
+    @XmlTransient
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
+
+    @Indexed(name = "index", unique = true)
+    private long index;
+
+    @NotNull
+    private String firstName;
+    @NotNull
+    private String lastName;
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
+    private Date birthday;
+    private List<Grade> grades;
+
 
     private Student(StudentBuilder builder) {
         this.firstName = builder.firstName;

@@ -1,8 +1,8 @@
 package org.dawiddc.egradebook;
 
 import org.dawiddc.egradebook.auth.AuthFilter;
+import org.dawiddc.egradebook.dbservice.GradebookDataService;
 import org.dawiddc.egradebook.exception.RestError;
-import org.dawiddc.egradebook.model.GradebookDataService;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;

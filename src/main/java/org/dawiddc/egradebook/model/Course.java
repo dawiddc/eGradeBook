@@ -18,14 +18,6 @@ import java.util.List;
 @XmlRootElement(name = "course")
 @XmlType(propOrder = {"id", "name", "lecturer", "links"})
 public class Course {
-
-
-    @Id
-    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
-    private ObjectId objectId;
-    private long id;
-    private String name;
-    private String lecturer;
     @InjectLinks({
             @InjectLink(value = "/courses/{id}", rel = "self"),
             @InjectLink(value = "/courses", rel = "parent")
@@ -36,13 +28,29 @@ public class Course {
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
 
+    @Id
+    @XmlTransient
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId objectId;
+
+    private long id;
+    private String name;
+    private String lecturer;
+
     private Course(CourseBuilder builder) {
         this.name = builder.name;
         this.lecturer = builder.lecturer;
     }
-
-
     public Course() {
+    }
+
+    @XmlTransient
+    public ObjectId getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(ObjectId objectId) {
+        this.objectId = objectId;
     }
 
     @XmlAttribute
@@ -64,7 +72,7 @@ public class Course {
     }
 
     @XmlElement
-    private String getLecturer() {
+    public String getLecturer() {
         return lecturer;
     }
 
