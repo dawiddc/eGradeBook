@@ -92,21 +92,25 @@ public class GradebookDataService {
         }
 
         if (datastore.getCount(Student.class) < 1) {
-            coursesList.add(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").build());
-            coursesList.add(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").build());
-            coursesList.add(new Course.CourseBuilder().name("TPAL").lecturer("Adam Kotarski").build());
+            coursesList.add(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").id(getCourseId()).build());
+            coursesList.add(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").id(getCourseId()).build());
+            coursesList.add(new Course.CourseBuilder().name("TPAL").lecturer("Adam Kotarski").id(getCourseId()).build());
             datastore.save(coursesList);
 
-            /* Student 0 */
+            /* Student 1 */
             grades.add(new Grade.GradeBuilder()
                     .value(5)
                     .date(new Date("2018/04/04"))
                     .course(CourseDBService.getCourseByName("TPSI"))
+                    .id(getGradeId())
+                    .studentOwnerIndex(1)
                     .build());
             grades.add(new Grade.GradeBuilder()
                     .value(4)
                     .date(new Date("2018/04/06"))
                     .course(CourseDBService.getCourseByName("Math"))
+                    .id(getGradeId())
+                    .studentOwnerIndex(1)
                     .build());
             studentsList.add(
                     new Student.StudentBuilder()
@@ -114,20 +118,25 @@ public class GradebookDataService {
                             .firstName("John")
                             .lastName("Doe")
                             .grades(grades)
+                            .index(getStudentIndex())
                             .build()
             );
 
-            /* Student 1 */
+            /* Student 2 */
             grades = new ArrayList<>();
             grades.add(new Grade.GradeBuilder()
                     .value((float) 3.5)
                     .date(new Date("2018/04/02"))
                     .course(CourseDBService.getCourseByName("TPSI"))
+                    .id(getGradeId())
+                    .studentOwnerIndex(2)
                     .build());
             grades.add(new Grade.GradeBuilder()
                     .value((float) 4.5)
                     .date(new Date("2018/04/01"))
-                    .course(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").build())
+                    .course(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").id(getCourseId()).build())
+                    .id(getGradeId())
+                    .studentOwnerIndex(2)
                     .build());
             studentsList.add(
                     new Student.StudentBuilder()
@@ -135,20 +144,25 @@ public class GradebookDataService {
                             .firstName("Diane")
                             .lastName("Pittsburg")
                             .grades(grades)
+                            .index(getStudentIndex())
                             .build()
             );
 
-            /* Student 2 */
+            /* Student 3 */
             grades = new ArrayList<>();
             grades.add(new Grade.GradeBuilder()
                     .value((float) 4)
                     .date(new Date("2018/04/04"))
-                    .course(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").build())
+                    .course(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").id(getCourseId()).build())
+                    .id(getGradeId())
+                    .studentOwnerIndex(3)
                     .build());
             grades.add(new Grade.GradeBuilder()
                     .value((float) 4.5)
                     .date(new Date("2018/04/05"))
-                    .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").build())
+                    .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").id(getCourseId()).build())
+                    .id(getGradeId())
+                    .studentOwnerIndex(3)
                     .build());
             studentsList.add(
                     new Student.StudentBuilder()
@@ -156,6 +170,7 @@ public class GradebookDataService {
                             .firstName("Matthew")
                             .lastName("Pettigrew")
                             .grades(grades)
+                            .index(getStudentIndex())
                             .build()
             );
 

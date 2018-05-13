@@ -27,21 +27,24 @@ public class Course {
     @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
-
     @Id
     @XmlTransient
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId objectId;
-
     private long id;
     private String name;
     private String lecturer;
-
     private Course(CourseBuilder builder) {
         this.name = builder.name;
         this.lecturer = builder.lecturer;
+        this.id = builder.id;
     }
+
     public Course() {
+    }
+
+    public List<Link> getLinks() {
+        return links;
     }
 
     @XmlTransient
@@ -83,6 +86,7 @@ public class Course {
     public static class CourseBuilder {
         private String name;
         private String lecturer;
+        private long id;
 
         public CourseBuilder name(String name) {
             this.name = name;
@@ -91,6 +95,11 @@ public class Course {
 
         public CourseBuilder lecturer(String lecturer) {
             this.lecturer = lecturer;
+            return this;
+        }
+
+        public CourseBuilder id(long id) {
+            this.id = id;
             return this;
         }
 

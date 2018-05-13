@@ -31,15 +31,12 @@ public class Student {
     @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
-
     @Id
     @XmlTransient
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
-
     @Indexed(name = "index", unique = true)
     private long index;
-
     @NotNull
     private String firstName;
     @NotNull
@@ -48,16 +45,20 @@ public class Student {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date birthday;
     private List<Grade> grades;
-
-
     private Student(StudentBuilder builder) {
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.birthday = builder.birthday;
         this.grades = builder.grades;
+        this.index = builder.index;
     }
 
+
     public Student() { }
+
+    public List<Link> getLinks() {
+        return links;
+    }
 
     @XmlTransient
     public ObjectId getId() {
@@ -119,6 +120,7 @@ public class Student {
         private String firstName;
         private String lastName;
         private Date birthday;
+        private long index;
 
         private List<Grade> grades;
 
@@ -139,6 +141,11 @@ public class Student {
 
         public StudentBuilder grades(List<Grade> grades) {
             this.grades = grades;
+            return this;
+        }
+
+        public StudentBuilder index(long index) {
+            this.index = index;
             return this;
         }
 

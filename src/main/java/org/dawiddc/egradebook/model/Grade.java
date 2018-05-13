@@ -16,6 +16,7 @@ import java.util.List;
 @XmlRootElement(name = "grade")
 @XmlType(propOrder = {"id", "course", "value", "date", "links"})
 public class Grade {
+
     @InjectLinks({
             @InjectLink(value = "students/{studentOwnerIndex}/grades", rel = "parent"),
             @InjectLink(value = "students/{studentOwnerIndex}/grades/{id}", rel = "self")
@@ -25,22 +26,26 @@ public class Grade {
     @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private List<Link> links;
-
     private long id;
     private float value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date date;
     private Course course;
-
     private long studentOwnerIndex;
 
     private Grade(GradeBuilder builder) {
         this.value = builder.value;
         this.date = builder.date;
         this.course = builder.course;
+        this.id = builder.id;
+        this.studentOwnerIndex = builder.studentOwnerIndex;
     }
 
     public Grade() { }
+
+    public List<Link> getLinks() {
+        return links;
+    }
 
     @XmlAttribute
     public long getId() {
@@ -91,6 +96,8 @@ public class Grade {
         private float value;
         private Date date;
         private Course course;
+        private long id;
+        private long studentOwnerIndex;
 
         public GradeBuilder value(float value) {
             this.value = value;
@@ -104,6 +111,16 @@ public class Grade {
 
         public GradeBuilder course(Course course) {
             this.course = course;
+            return this;
+        }
+
+        public GradeBuilder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public GradeBuilder studentOwnerIndex(long studentOwnerIndex) {
+            this.studentOwnerIndex = studentOwnerIndex;
             return this;
         }
 

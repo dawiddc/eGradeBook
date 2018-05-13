@@ -3,6 +3,7 @@ package org.dawiddc.egradebook;
 import org.dawiddc.egradebook.auth.AuthFilter;
 import org.dawiddc.egradebook.dbservice.GradebookDataService;
 import org.dawiddc.egradebook.exception.RestError;
+import org.dawiddc.egradebook.utils.DateParamConverterProvider;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
@@ -23,7 +24,8 @@ public class Main {
                 .registerClasses(
                         DeclarativeLinkingFeature.class,
                         RestError.class,
-                        AuthFilter.class);
+                        AuthFilter.class,
+                        DateParamConverterProvider.class);
         /* Create inital model objects */
         GradebookDataService.getInstance().createMockModel();
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);

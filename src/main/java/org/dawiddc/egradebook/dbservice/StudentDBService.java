@@ -49,7 +49,7 @@ public class StudentDBService {
         UpdateOperations<Student> updateOperations = datastore.createUpdateOperations(Student.class)
                 .set("firstName", student.getFirstName())
                 .set("lastName", student.getLastName())
-                .set("birthDay", student.getBirthday())
+                .set("birthday", student.getBirthday())
                 .set("grades", student.getGrades());
         datastore.findAndModify(query, updateOperations);
     }
