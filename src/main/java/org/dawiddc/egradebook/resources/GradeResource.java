@@ -1,5 +1,6 @@
 package org.dawiddc.egradebook.resources;
 
+import jersey.repackaged.com.google.common.collect.Lists;
 import org.dawiddc.egradebook.dbservice.CourseDBService;
 import org.dawiddc.egradebook.dbservice.GradebookDataService;
 import org.dawiddc.egradebook.dbservice.StudentDBService;
@@ -13,12 +14,15 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @PermitAll
 @Path("students/{index}/grades")
@@ -28,12 +32,17 @@ public class GradeResource {
 
     @GET
     @RolesAllowed("lecturer")
-    public List<Grade> getStudentGrades(@PathParam("index") long index) {
+    public Response getStudentGrades(@PathParam("index") long index) {
         Student student = StudentDBService.getStudent(index);
         if (student == null)
             throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
-        List<Grade> gradesList = student.getGrades();
-        return gradesList;
+        if (student.getGrades() == null || student.getGrades().size() < 1) {
+            throw new NotFoundException(new JsonError("Error", "Student list is empty"));
+        }
+        GenericEntity<List<Grade>> entity = new GenericEntity<List<Grade>>(Lists.newArrayList(student.getGrades())) {
+        };
+
+        return Response.status(Response.Status.OK).entity(entity).build();
     }
 
     @GET
@@ -42,6 +51,8 @@ public class GradeResource {
         Student student = StudentDBService.getStudent(index);
         if (student == null)
             throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
+        if (student.getGrades() == null || student.getGrades().size() < 1)
+            throw new NotFoundException(new JsonError("Error", "Grade list is empty"));
         Optional<Grade> grade = student.getGrades().stream().filter(g -> g.getId() == id).findFirst();
         if (!grade.isPresent())
             throw new NotFoundException(new JsonError("Error", "Grade " + id + " not found"));
@@ -58,6 +69,8 @@ public class GradeResource {
         if (course == null)
             throw new NotFoundException(new JsonError("Error", "Grade's course " + grade.getCourse().getId() + " not found"));
         List<Grade> studentGrades = student.getGrades();
+        if (studentGrades == null)
+            studentGrades = new ArrayList<>();
         grade.setId(GradebookDataService.getFirstAvailableGradeId());
         grade.setStudentOwnerIndex(student.getIndex());
         grade.setCourse(course);
@@ -83,17 +96,28 @@ public class GradeResource {
         Student student = StudentDBService.getStudent(index);
         if (student == null)
             throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
-        Optional<Grade> gradeMatch = student.getGrades().stream().filter(g -> g.getId() == id).findFirst();
-        if (gradeMatch.isPresent()) {
-            gradeMatch.get().setStudentOwnerIndex(index);
-            gradeMatch.get().setValue(newGrade.getValue());
-            gradeMatch.get().setCourse(newGrade.getCourse());
-            gradeMatch.get().setDate(newGrade.getDate());
+        Course gradesCourse = CourseDBService.getCourseById(newGrade.getCourse().getId());
+        if (gradesCourse == null) {
+            throw new NotFoundException(new JsonError("Error", "Course " + newGrade.getCourse().getId() + " not found"));
+        }
+        Grade studentGrade = StudentDBService.getStudentGrade(index, id);
+        /* If grade already exists, modify, else create it */
+
+        if (studentGrade != null) {
+            studentGrade.setStudentOwnerIndex(index);
+            studentGrade.setValue(newGrade.getValue());
+            studentGrade.setDate(newGrade.getDate());
+            studentGrade.setCourse(gradesCourse);
+            student.setGrades(student.getGrades().stream().map(g -> g.getId() == id ? studentGrade : g).collect(Collectors.toList()));
             StudentDBService.updateStudent(student);
             return Response.status(Response.Status.NO_CONTENT).build();
         } else {
-            newGrade.setId(GradebookDataService.getFirstAvailableGradeId());
+            newGrade.setId(id);
+            newGrade.setStudentOwnerIndex(index);
+            newGrade.setCourse(gradesCourse);
             List<Grade> grades = StudentDBService.getStudentGrades(index);
+            if (grades == null)
+                grades = new ArrayList<>();
             grades.add(newGrade);
             student.setGrades(grades);
             StudentDBService.updateStudent(student);

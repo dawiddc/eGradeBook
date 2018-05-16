@@ -1,8 +1,6 @@
 package org.dawiddc.egradebook.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
-import org.dawiddc.egradebook.utils.ObjectIdJaxbAdapter;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.annotations.Entity;
@@ -14,9 +12,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 @Entity("courses")
-@SuppressWarnings("unused")
 @XmlRootElement(name = "course")
-@XmlType(propOrder = {"id", "name", "lecturer", "links"})
 public class Course {
     @InjectLinks({
             @InjectLink(value = "/courses/{id}", rel = "self"),
@@ -24,16 +20,19 @@ public class Course {
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
-    @JsonProperty("links")
+//    @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    private List<Link> links;
+    List<Link> links;
+
     @Id
     @XmlTransient
-    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+//    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId objectId;
+
     private long id;
     private String name;
     private String lecturer;
+
     private Course(CourseBuilder builder) {
         this.name = builder.name;
         this.lecturer = builder.lecturer;
@@ -41,10 +40,6 @@ public class Course {
     }
 
     public Course() {
-    }
-
-    public List<Link> getLinks() {
-        return links;
     }
 
     @XmlTransient

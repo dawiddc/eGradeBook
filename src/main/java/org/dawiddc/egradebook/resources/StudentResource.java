@@ -1,19 +1,25 @@
 package org.dawiddc.egradebook.resources;
 
+import jersey.repackaged.com.google.common.collect.Lists;
+import org.dawiddc.egradebook.dbservice.CourseDBService;
 import org.dawiddc.egradebook.dbservice.GradebookDataService;
 import org.dawiddc.egradebook.dbservice.StudentDBService;
 import org.dawiddc.egradebook.exception.JsonError;
 import org.dawiddc.egradebook.exception.NotFoundException;
+import org.dawiddc.egradebook.model.Course;
+import org.dawiddc.egradebook.model.Grade;
 import org.dawiddc.egradebook.model.Student;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 @PermitAll
@@ -23,10 +29,13 @@ import java.util.List;
 public class StudentResource {
 
     @GET
-    public List<Student> getStudentList() {
+    public Response getStudentList() {
         List<Student> students = StudentDBService.getAllStudents();
-        if (!(students == null || students.size() == 0))
-            return students;
+        if (!(students == null || students.size() == 0)) {
+            GenericEntity<List<Student>> entity = new GenericEntity<List<Student>>(Lists.newArrayList(students)) {
+            };
+            return Response.status(Response.Status.OK).entity(entity).build();
+        }
         throw new NotFoundException(new JsonError("Error", "Student list is empty"));
     }
 
@@ -62,6 +71,17 @@ public class StudentResource {
     @RolesAllowed("lecturer")
     public Response updateStudent(@PathParam("index") long index, @NotNull Student newStudent) {
         Student oldStudent = StudentDBService.getStudent(index);
+        Course searchedCourse;
+        for (Grade grade : newStudent.getGrades()) {
+            searchedCourse = CourseDBService.getCourseById(grade.getCourse().getId());
+            if (searchedCourse == null) {
+                throw new NotFoundException(new JsonError("Error", "Course " + grade.getCourse().getId() + " not found"));
+            }
+            grade.setCourse(searchedCourse);
+        }
+        if (newStudent.getGrades() == null)
+            newStudent.setGrades(new ArrayList<>());
+
         if (oldStudent != null) {
             oldStudent.setGrades(newStudent.getGrades());
             oldStudent.setBirthday(newStudent.getBirthday());
@@ -70,17 +90,19 @@ public class StudentResource {
             StudentDBService.updateStudent(oldStudent);
 
             return Response.status(Response.Status.NO_CONTENT).build();
+        } else {
+            newStudent.setIndex(index);
+            StudentDBService.addStudent(newStudent);
+
+            String stringUri = "www.localhost:8080/students/" + newStudent.getIndex();
+            URI url = null;
+            try {
+                url = new URI(stringUri);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            return Response.created(url).build();
         }
-        newStudent.setIndex(index);
-        StudentDBService.addStudent(newStudent);
-        String stringUri = "www.localhost:8080/students/" + newStudent.getIndex();
-        URI url = null;
-        try {
-            url = new URI(stringUri);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return Response.created(url).build();
     }
 
     @DELETE

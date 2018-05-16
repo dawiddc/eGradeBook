@@ -3,7 +3,6 @@ package org.dawiddc.egradebook.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
-import org.dawiddc.egradebook.utils.ObjectIdJaxbAdapter;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.annotations.Entity;
@@ -19,7 +18,6 @@ import java.util.List;
 
 @Entity("students")
 @XmlRootElement(name = "student")
-@XmlType(propOrder = {"index", "firstName", "lastName", "birthday", "grades", "links"})
 public class Student {
     @InjectLinks({
             @InjectLink(value = "/students/{index}", rel = "self"),
@@ -28,13 +26,15 @@ public class Student {
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
-    @JsonProperty("links")
+//    @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    private List<Link> links;
+    List<Link> links;
+
     @Id
     @XmlTransient
-    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+//    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
+
     @Indexed(name = "index", unique = true)
     private long index;
     @NotNull
@@ -45,6 +45,7 @@ public class Student {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date birthday;
     private List<Grade> grades;
+
     private Student(StudentBuilder builder) {
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
@@ -53,12 +54,7 @@ public class Student {
         this.index = builder.index;
     }
 
-
     public Student() { }
-
-    public List<Link> getLinks() {
-        return links;
-    }
 
     @XmlTransient
     public ObjectId getId() {

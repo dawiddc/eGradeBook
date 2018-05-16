@@ -9,7 +9,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 import java.util.List;
 
 public class CourseDBService {
-    private static Datastore datastore = MorphiaDatastore.getDatastore();
+    private static final Datastore datastore = MorphiaDatastore.getDatastore();
 
     public static List<Course> getCourses() {
         Query<Course> query = datastore.find(Course.class);
@@ -31,11 +31,11 @@ public class CourseDBService {
     }
 
     public static void updateCourse(Course course) {
-        Query<Course> query = datastore.find(Course.class).field("id").equal(course.getId());
+        Query<Course> query = datastore.createQuery(Course.class).field("id").equal(course.getId());
         UpdateOperations<Course> updateOperations = datastore.createUpdateOperations(Course.class)
                 .set("name", course.getName())
                 .set("lecturer", course.getLecturer());
-        datastore.findAndModify(query, updateOperations);
+        datastore.update(query, updateOperations);
     }
 
     public static void deleteCourse(long id) {

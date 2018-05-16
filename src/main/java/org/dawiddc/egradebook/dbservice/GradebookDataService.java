@@ -95,6 +95,9 @@ public class GradebookDataService {
             coursesList.add(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").id(getCourseId()).build());
             coursesList.add(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").id(getCourseId()).build());
             coursesList.add(new Course.CourseBuilder().name("TPAL").lecturer("Adam Kotarski").id(getCourseId()).build());
+            coursesList.add(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").id(getCourseId()).build());
+            coursesList.add(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").id(getCourseId()).build());
+            coursesList.add(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").id(getCourseId()).build());
             datastore.save(coursesList);
 
             /* Student 1 */
@@ -134,7 +137,7 @@ public class GradebookDataService {
             grades.add(new Grade.GradeBuilder()
                     .value((float) 4.5)
                     .date(new Date("2018/04/01"))
-                    .course(new Course.CourseBuilder().name("ABCD").lecturer("Jett Mall").id(getCourseId()).build())
+                    .course(CourseDBService.getCourseByName("ABCD"))
                     .id(getGradeId())
                     .studentOwnerIndex(2)
                     .build());
@@ -153,14 +156,14 @@ public class GradebookDataService {
             grades.add(new Grade.GradeBuilder()
                     .value((float) 4)
                     .date(new Date("2018/04/04"))
-                    .course(new Course.CourseBuilder().name("TWO").lecturer("Andrzej Zarcha").id(getCourseId()).build())
+                    .course(CourseDBService.getCourseByName("TWO"))
                     .id(getGradeId())
                     .studentOwnerIndex(3)
                     .build());
             grades.add(new Grade.GradeBuilder()
                     .value((float) 4.5)
                     .date(new Date("2018/04/05"))
-                    .course(new Course.CourseBuilder().name("English").lecturer("Olivia Bolton").id(getCourseId()).build())
+                    .course(CourseDBService.getCourseByName("English"))
                     .id(getGradeId())
                     .studentOwnerIndex(3)
                     .build());

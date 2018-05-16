@@ -1,10 +1,12 @@
 package org.dawiddc.egradebook.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.*;
@@ -14,23 +16,27 @@ import java.util.List;
 
 @Embedded
 @XmlRootElement(name = "grade")
-@XmlType(propOrder = {"id", "course", "value", "date", "links"})
 public class Grade {
-
     @InjectLinks({
             @InjectLink(value = "students/{studentOwnerIndex}/grades", rel = "parent"),
             @InjectLink(value = "students/{studentOwnerIndex}/grades/{id}", rel = "self")
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
-    @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
-    private List<Link> links;
+    List<Link> links;
+
+    @Id
+    @XmlTransient
+//    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId objectId;
     private long id;
     private float value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date date;
+    @Reference
     private Course course;
+    @XmlTransient
     private long studentOwnerIndex;
 
     private Grade(GradeBuilder builder) {
@@ -43,8 +49,13 @@ public class Grade {
 
     public Grade() { }
 
-    public List<Link> getLinks() {
-        return links;
+    @XmlTransient
+    public ObjectId getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(ObjectId objectId) {
+        this.objectId = objectId;
     }
 
     @XmlAttribute
