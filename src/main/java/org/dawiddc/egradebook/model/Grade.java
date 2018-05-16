@@ -1,6 +1,7 @@
 package org.dawiddc.egradebook.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
@@ -23,6 +24,7 @@ public class Grade {
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
+    @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     List<Link> links;
 

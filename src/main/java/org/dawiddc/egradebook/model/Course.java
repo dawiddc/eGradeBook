@@ -1,5 +1,6 @@
 package org.dawiddc.egradebook.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
@@ -20,7 +21,7 @@ public class Course {
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
-//    @JsonProperty("links")
+    @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     List<Link> links;
 

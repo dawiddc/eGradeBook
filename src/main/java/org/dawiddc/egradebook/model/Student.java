@@ -26,7 +26,7 @@ public class Student {
     })
     @XmlElement(name = "link")
     @XmlElementWrapper(name = "links")
-//    @JsonProperty("links")
+    @JsonProperty("links")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     List<Link> links;
 

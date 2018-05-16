@@ -32,14 +32,35 @@ public class GradeResource {
 
     @GET
     @RolesAllowed("lecturer")
-    public Response getStudentGrades(@PathParam("index") long index) {
+    public Response getStudentGrades(@PathParam("index") long index,
+                                     @QueryParam("courseName") String courseName,
+                                     @QueryParam("value") Float value,
+                                     @QueryParam("valueRelation") String valueRelation) {
         Student student = StudentDBService.getStudent(index);
         if (student == null)
             throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
-        if (student.getGrades() == null || student.getGrades().size() < 1) {
-            throw new NotFoundException(new JsonError("Error", "Student list is empty"));
+
+        List<Grade> grades = student.getGrades();
+        if (grades == null || grades.isEmpty()) {
+            throw new NotFoundException(new JsonError("Error", "This student has no grades"));
         }
-        GenericEntity<List<Grade>> entity = new GenericEntity<List<Grade>>(Lists.newArrayList(student.getGrades())) {
+
+        if (courseName != null) {
+            grades = grades.stream().filter(g -> g.getCourse().getName().equals(courseName)).collect(Collectors.toList());
+        }
+
+        if (value != null && valueRelation != null) {
+            switch (valueRelation.toLowerCase()) {
+                case "grater":
+                    grades = grades.stream().filter(gr -> gr.getValue() > value).collect(Collectors.toList());
+                    break;
+                case "lower":
+                    grades = grades.stream().filter(gr -> gr.getValue() < value).collect(Collectors.toList());
+                    break;
+            }
+        }
+
+        GenericEntity<List<Grade>> entity = new GenericEntity<List<Grade>>(Lists.newArrayList(grades)) {
         };
 
         return Response.status(Response.Status.OK).entity(entity).build();

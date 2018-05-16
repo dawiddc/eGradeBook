@@ -20,7 +20,9 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @PermitAll
 @Path("students")
@@ -29,14 +31,39 @@ import java.util.List;
 public class StudentResource {
 
     @GET
-    public Response getStudentList() {
+    public Response getStudentList(@QueryParam("firstName") String firstName,
+                                   @QueryParam("lastName") String lastName,
+                                   @QueryParam("date") Date date,
+                                   @QueryParam("dateRelation") String dateRelation) {
         List<Student> students = StudentDBService.getAllStudents();
-        if (!(students == null || students.size() == 0)) {
-            GenericEntity<List<Student>> entity = new GenericEntity<List<Student>>(Lists.newArrayList(students)) {
-            };
-            return Response.status(Response.Status.OK).entity(entity).build();
+
+        if ((students == null || students.size() == 0)) {
+            throw new NotFoundException(new JsonError("Error", "Student list is empty"));
         }
-        throw new NotFoundException(new JsonError("Error", "Student list is empty"));
+        if (firstName != null) {
+            students = students.stream().filter(s -> s.getFirstName().equals(firstName)).collect(Collectors.toList());
+        }
+        if (lastName != null) {
+            students = students.stream().filter(st -> st.getLastName().equals(lastName)).collect(Collectors.toList());
+        }
+        if (date != null && dateRelation != null) {
+            switch (dateRelation.toLowerCase()) {
+                case "equal":
+                    students = students.stream().filter(st -> st.getBirthday().equals(date)).collect(Collectors.toList());
+                    break;
+                case "after":
+                    students = students.stream().filter(st -> st.getBirthday().after(date)).collect(Collectors.toList());
+                    break;
+                case "before":
+                    students = students.stream().filter(st -> st.getBirthday().before(date)).collect(Collectors.toList());
+                    break;
+            }
+        }
+
+        GenericEntity<List<Student>> entity = new GenericEntity<List<Student>>(Lists.newArrayList(students)) {
+        };
+
+        return Response.status(Response.Status.OK).entity(entity).build();
     }
 
     @GET
@@ -53,6 +80,7 @@ public class StudentResource {
     @POST
     public Response postStudent(@NotNull Student student) {
         student.setIndex(GradebookDataService.getFirstAvailableStudentIndex());
+        assignCourses(student);
         StudentDBService.addStudent(student);
 
         String stringUri = "www.localhost:8080/students/" + student.getIndex();
@@ -66,19 +94,23 @@ public class StudentResource {
         return Response.created(url).build();
     }
 
-    @PUT
-    @Path("/{index}")
-    @RolesAllowed("lecturer")
-    public Response updateStudent(@PathParam("index") long index, @NotNull Student newStudent) {
-        Student oldStudent = StudentDBService.getStudent(index);
+    private void assignCourses(@NotNull Student student) {
         Course searchedCourse;
-        for (Grade grade : newStudent.getGrades()) {
+        for (Grade grade : student.getGrades()) {
             searchedCourse = CourseDBService.getCourseById(grade.getCourse().getId());
             if (searchedCourse == null) {
                 throw new NotFoundException(new JsonError("Error", "Course " + grade.getCourse().getId() + " not found"));
             }
             grade.setCourse(searchedCourse);
         }
+    }
+
+    @PUT
+    @Path("/{index}")
+    @RolesAllowed("lecturer")
+    public Response updateStudent(@PathParam("index") long index, @NotNull Student newStudent) {
+        Student oldStudent = StudentDBService.getStudent(index);
+        assignCourses(newStudent);
         if (newStudent.getGrades() == null)
             newStudent.setGrades(new ArrayList<>());
 
