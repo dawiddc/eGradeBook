@@ -1,0 +1,11 @@
+article:target {
+    display: block;
+}
+
+article {
+    display: none;
+}
+
+input {
+    width: 95%;
+}

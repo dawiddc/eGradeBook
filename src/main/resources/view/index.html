@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>eGradebook</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<div class="main-wrapper">
+    <header class="box box1">
+        <figure>
+            <img src="assets/biret.png" alt="Student Grades Manager" style="width:8%">
+            <h1>Welcome to eGradebook!</h1>
+        </figure>
+    </header>
+    <div>
+        <nav>
+            <ul>
+                <li><a href="#students">Student list</a></li>
+                <li><a href="#courses">Course list</a></li>
+            </ul>
+        </nav>
+        <article id="students">
+            <h2>Student list</h2>
+            <form>
+                <table>
+                    <tr>
+                        <th>Lp</th>
+                        <th><input type="number" name="index" placeholder="Index"></th>
+                        <th><input type="text" name="firstName" placeholder="John"></th>
+                        <th><input type="text" name="lastName" placeholder="Doe"></th>
+                        <th><input type="text" name="birthday" placeholder="Birthday" onfocus="(this.type='date')"
+                                   onblur="(this.type='text')"></th>
+                        <th><input type="text" name="action" value="Action" readonly></th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="number" name="index" value="122363" readonly></td>
+                        <td><input type="text" name="firstName" value="Dawid"></td>
+                        <td><input type="text" name="lastName" value="Smarzewski"></td>
+                        <td><input type="text" name="birthday" onfocus="(this.type='date')" onblur="(this.type='text')"
+                                   value="1995-07-15"></td>
+                        <td>
+                            <button onclick="window.location.href='#grades'">See grades</button>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="number" name="index" value="122121" readonly></td>
+                        <td><input type="text" name="firstName" value="David"></td>
+                        <td><input type="text" name="lastName" value="Schwimmer"></td>
+                        <td><input type="text" name="birthday" onfocus="(this.type='date')" onblur="(this.type='text')"
+                                   value="1990-02-21"></td>
+                        <td>
+                            <button onclick="window.location.href='#grades'">See grades</button>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><input type="number" name="index" value="122777" readonly></td>
+                        <td><input type="text" name="firstName" value="Matt"></td>
+                        <td><input type="text" name="lastName" value="LeBlanc"></td>
+                        <td><input type="text" name="birthday" onfocus="(this.type='date')" onblur="(this.type='text')"
+                                   value="1964-02-23"></td>
+                        <td>
+                            <button onclick="window.location.href='#grades'">See grades</button>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><input type="number" name="index" placeholder="Index" required></td>
+                        <td><input type="text" name="firstName" placeholder="First name" required></td>
+                        <td><input type="text" name="lastName" placeholder="Last name" required></td>
+                        <td><input type="text" name="birthday" placeholder="Birthday" onfocus="(this.type='date')"
+                                   onblur="(this.type='text')" required></td>
+                        <td>
+                            <button type="submit">Add</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </article>
+        <article id="courses">
+            <h2>Course list</h2>
+            <form>
+                <table>
+                    <tr>
+                        <th>Lp</th>
+                        <th><input type="text" name="name" placeholder="Name"></th>
+                        <th><input type="text" name="lecturer" placeholder="Lecturer"></th>
+                        <th><input type="text" name="action" placeholder="Actions" readonly></th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="text" name="name" value="Technologie Programistyczne"></td>
+                        <td><input type="text" name="lecturer" value="dr inż. Tomasz Pawlak"></td>
+                        <td>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="text" name="name" value="AMiM"></td>
+                        <td><input type="text" name="lecturer" value="dr inż. Bartłomiej Prędki"></td>
+                        <td>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><input type="text" name="name" value="Aplikacje lokalne"></td>
+                        <td><input type="text" name="lecturer" value="dr inż. Piotr Zielniewicz"></td>
+                        <td>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><input type="text" name="name" placeholder="Course name" required></td>
+                        <td><input type="text" name="lecturer" placeholder="Lecturer" required></td>
+                        <td>
+                            <button type="submit">Add course</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </article>
+        <article id="grades">
+            <h2>Grade list</h2>
+            <form>
+                <table>
+                    <tr>
+                        <th><input type="text" name="course" placeholder="Course"></th>
+                        <th><input type="number" name="value" placeholder="Grade"></th>
+                        <th><input type="text" name="date" placeholder="Acquire date"></th>
+                        <th><input type="text" name="action" value="Action" readonly></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select>
+                                <option selected="selected">Technologie Programistyczne</option>
+                                <option>AMiM</option>
+                                <option>Aplikacje lokalne</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="value" value="5" step="0.5" min="2" max="5"></td>
+                        <td><input type="text" name="date" value="12.05.2018"></td>
+                        <td>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select>
+                                <option>Technologie Programistyczne</option>
+                                <option selected="selected">AMiM</option>
+                                <option>Aplikacje lokalne</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="value" value="5" step="0.5" min="2.0" max="5.0"></td>
+                        <td><input type="text" name="date" value="17.05.2018"></td>
+                        <td>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select>
+                                <option>Technologie Programistyczne</option>
+                                <option>AMiM</option>
+                                <option selected="selected">Aplikacje lokalne</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="value" value="5" step="0.5" min="2.0" max="5.0"></td>
+                        <td><input type="text" name="date" value="22.01.2018"></td>
+                        <td>
+                            <button type="button">Modify</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="course" placeholder="Course name"></td>
+                        <td><input type="text" name="value" placeholder="Grade"></td>
+                        <td><input type="text" name="date" placeholder="Date"></td>
+                        <td>
+                            <button type="submit">Assign grade</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </article>
+    </div>
+    <footer>
+        <p>
+            <small>
+                eGradeBook created by Dawid C. est. 2018.
+                <br>
+                <a href="http://www2.cs.put.poznan.pl/">Find more info on CS institute website</a>
+            </small>
+        </p>
+        <p>
+            <small></small>
+        </p>
+    </footer>
+</div>
+</body>
+</html>
