@@ -1,12 +1,14 @@
 package org.dawiddc.egradebook.dbservice;
 
 import org.dawiddc.egradebook.model.Course;
+import org.dawiddc.egradebook.model.Student;
 import org.dawiddc.egradebook.utils.MorphiaDatastore;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CourseDBService {
     private static final Datastore datastore = MorphiaDatastore.getDatastore();
@@ -45,6 +47,10 @@ public class CourseDBService {
 
     public static void deleteCourse(long id) {
         Course course = getCourseById(id);
+        for (Student student : StudentDBService.getAllStudents(null, null, null, null)) {
+            student.setGrades(student.getGrades().stream().filter(grade -> grade.getCourse().getId() != id).collect(Collectors.toList()));
+            StudentDBService.updateStudent(student);
+        }
         if (course != null) {
             datastore.delete(course);
         }

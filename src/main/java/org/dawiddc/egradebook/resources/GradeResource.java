@@ -53,7 +53,7 @@ public class GradeResource {
         /* Filtering by grade assign date */
         if (value != null && valueRelation != null) {
             switch (valueRelation.toLowerCase()) {
-                case "grater":
+                case "greater":
                     grades = grades.stream().filter(gr -> gr.getValue() > value).collect(Collectors.toList());
                     break;
                 case "lower":
