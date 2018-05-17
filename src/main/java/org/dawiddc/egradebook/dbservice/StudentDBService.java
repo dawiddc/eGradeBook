@@ -7,6 +7,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,8 +20,30 @@ public class StudentDBService {
      *
      * @return list of students from database
      */
-    public static List<Student> getAllStudents() {
-        Query<Student> query = datastore.find(Student.class);
+    public static List<Student> getAllStudents(String firstName, String lastName, Date birthday, String dateRelation) {
+
+        Query<Student> query = datastore.createQuery(Student.class);
+
+        if (firstName != null) {
+            query = query.field("firstName").containsIgnoreCase(firstName);
+        }
+        if (lastName != null) {
+            query = query.field("lastName").containsIgnoreCase(lastName);
+        }
+        if (birthday != null && dateRelation != null) {
+            switch (dateRelation.toLowerCase()) {
+                case "equal":
+                    query.filter("birthday ==", birthday);
+                    break;
+                case "after":
+                    query.filter("birthday >", birthday);
+                    break;
+                case "before":
+                    query.filter("birthday <", birthday);
+                    break;
+            }
+        }
+
         return query.asList();
     }
 

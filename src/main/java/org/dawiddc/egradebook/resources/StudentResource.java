@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @PermitAll
 @Path("students")
@@ -33,31 +32,12 @@ public class StudentResource {
     @GET
     public Response getStudentList(@QueryParam("firstName") String firstName,
                                    @QueryParam("lastName") String lastName,
-                                   @QueryParam("date") Date date,
+                                   @QueryParam("date") Date birthday,
                                    @QueryParam("dateRelation") String dateRelation) {
-        List<Student> students = StudentDBService.getAllStudents();
+        List<Student> students = StudentDBService.getAllStudents(firstName, lastName, birthday, dateRelation);
 
         if ((students == null || students.size() == 0)) {
             throw new NotFoundException(new JsonError("Error", "Student list is empty"));
-        }
-        if (firstName != null) {
-            students = students.stream().filter(s -> s.getFirstName().equals(firstName)).collect(Collectors.toList());
-        }
-        if (lastName != null) {
-            students = students.stream().filter(st -> st.getLastName().equals(lastName)).collect(Collectors.toList());
-        }
-        if (date != null && dateRelation != null) {
-            switch (dateRelation.toLowerCase()) {
-                case "equal":
-                    students = students.stream().filter(st -> st.getBirthday().equals(date)).collect(Collectors.toList());
-                    break;
-                case "after":
-                    students = students.stream().filter(st -> st.getBirthday().after(date)).collect(Collectors.toList());
-                    break;
-                case "before":
-                    students = students.stream().filter(st -> st.getBirthday().before(date)).collect(Collectors.toList());
-                    break;
-            }
         }
 
         GenericEntity<List<Student>> entity = new GenericEntity<List<Student>>(Lists.newArrayList(students)) {

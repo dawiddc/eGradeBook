@@ -45,10 +45,12 @@ public class GradeResource {
             throw new NotFoundException(new JsonError("Error", "This student has no grades"));
         }
 
+        /* Filtering by grade's course name */
         if (courseName != null) {
             grades = grades.stream().filter(g -> g.getCourse().getName().equals(courseName)).collect(Collectors.toList());
         }
 
+        /* Filtering by grade assign date */
         if (value != null && valueRelation != null) {
             switch (valueRelation.toLowerCase()) {
                 case "grater":

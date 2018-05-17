@@ -11,8 +11,13 @@ import java.util.List;
 public class CourseDBService {
     private static final Datastore datastore = MorphiaDatastore.getDatastore();
 
-    public static List<Course> getCourses() {
+    public static List<Course> getCourses(String lecturer) {
         Query<Course> query = datastore.find(Course.class);
+
+        if (lecturer != null) {
+            query = query.field("lecturer").containsIgnoreCase(lecturer);
+        }
+
         return query.asList();
     }
 

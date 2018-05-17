@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @PermitAll
 @Path("courses")
@@ -34,14 +33,10 @@ public class CourseResource {
      */
     @GET
     public Response getCoursesList(@QueryParam("lecturer") String lecturer) {
-        List<Course> courses = CourseDBService.getCourses();
+        List<Course> courses = CourseDBService.getCourses(lecturer);
 
         if (courses == null || courses.size() == 0) {
             return Response.status(Response.Status.NOT_FOUND).entity("No courses found").build();
-        }
-
-        if (lecturer != null) {
-            courses = courses.stream().filter(c -> c.getLecturer().equals(lecturer)).collect(Collectors.toList());
         }
 
         GenericEntity<List<Course>> entity = new GenericEntity<List<Course>>(Lists.newArrayList(courses)) {
