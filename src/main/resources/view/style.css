@@ -1,11 +1,107 @@
 article:target {
     display: block;
+    margin-left: 10px;
 }
 
 article {
     display: none;
+    white-space: nowrap;
 }
 
 input {
     width: 95%;
+}
+
+nav {
+    background: #2186C4;
+    flex-grow: 1;
+    min-width: 175px;
+}
+
+header {
+    background: #3F464C;
+    display: inline-block;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+}
+
+.header img {
+    align-self: center;
+}
+
+.container ul {
+    list-style: none;
+    padding-left: 0.5em;
+}
+
+#students {
+    flex-grow: 3;
+}
+
+.container a {
+    text-decoration: none;
+    color: white;
+}
+
+footer {
+    background: linear-gradient(#2186C4, white);
+    margin-left: 10px;
+}
+
+h2 {
+    margin-top: 0px;
+    padding-top: 10px;
+    color: #FF8066;
+    font-family: "Calibri";
+    font-weight: 100;
+}
+
+li {
+    padding: 10px;
+}
+
+li:hover {
+    background: #2882a3
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table input {
+    border: none;
+    padding: 0.2em;
+}
+
+table tr:nth-child(even) {
+    background-color: #7ECEFD;
+}
+
+table tr:nth-child(odd) {
+    background-color: #FFF6E5;
+}
+
+table tr:hover {
+    background-color: #FF7F66;
+}
+
+table th {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: left;
+    background-color: #3F464C;
+    color: white;
 }
