@@ -1,3 +1,20 @@
+body {
+    margin: 0;
+    background-color: #6693C0;
+    color: #092b17;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.contentBody {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+
+}
+
 article:target {
     display: block;
     margin-left: 10px;
@@ -12,16 +29,33 @@ input {
     width: 95%;
 }
 
+header {
+    background: #3F464C;
+    display: inline-block;
+    width: 100%;
+}
+
 nav {
     background: #2186C4;
     flex-grow: 1;
     min-width: 175px;
 }
 
-header {
-    background: #3F464C;
-    display: inline-block;
-    width: 100%;
+nav ul {
+    list-style-type: none;
+    padding: 1em 0 0;
+    margin: 0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+nav ul li a {
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
 }
 
 .header {
@@ -32,6 +66,11 @@ header {
 }
 
 .header img {
+    max-width: 5em;
+    max-height: 5em;
+    min-width: 3em;
+    min-height: 3em;
+    margin-right: 1em;
     align-self: center;
 }
 
@@ -40,7 +79,7 @@ header {
     padding-left: 0.5em;
 }
 
-#students {
+#students, #courses, #grades {
     flex-grow: 3;
 }
 
@@ -49,17 +88,13 @@ header {
     color: white;
 }
 
-footer {
-    background: linear-gradient(#2186C4, white);
-    margin-left: 10px;
-}
-
 h2 {
     margin-top: 0px;
     padding-top: 10px;
-    color: #FF8066;
+    color: #195DA1;
     font-family: "Calibri";
-    font-weight: 100;
+    font-weight: bold;
+    text-transform: capitalize;
 }
 
 li {
@@ -68,13 +103,6 @@ li {
 
 li:hover {
     background: #2882a3
-}
-
-.container {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-
 }
 
 table {
@@ -87,15 +115,15 @@ table input {
 }
 
 table tr:nth-child(even) {
-    background-color: #7ECEFD;
+    background-color: #7ecefd;
 }
 
 table tr:nth-child(odd) {
-    background-color: #FFF6E5;
+    background-color: #66a4c0;
 }
 
 table tr:hover {
-    background-color: #FF7F66;
+    background-color: #2186C4;
 }
 
 table th {
@@ -104,4 +132,103 @@ table th {
     text-align: left;
     background-color: #3F464C;
     color: white;
+}
+
+table td,
+table th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+table tr th input,
+table tr td input {
+    width: auto;
+}
+
+table tr th input,
+table tr th select {
+    text-align: center;
+}
+
+table tr th input,
+table tr td input,
+table tr th select,
+table tr td select {
+    width: 100%;
+    background-color: inherit;
+    border: none;
+    color: inherit;
+}
+
+/*table tr th input:invalid,*/
+/*table tr td input:invalid,*/
+/*table tr th select:invalid,*/
+/*table tr td select:invalid{*/
+/*border:3px solid red;*/
+/*color: red;*/
+/*}*/
+
+footer {
+    background: linear-gradient(#2186C4, white);
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@media print {
+    footer,
+    nav,
+    header {
+        display: none;
+    }
+
+    main table h3 {
+        color: black;
+    }
+
+    main table tr td:last-of-type,
+    main table tr th:last-of-type {
+        display: none;
+    }
+
+    body,
+    main table tr:nth-last-of-type(odd),
+    main table tr:nth-last-of-type(even) {
+        background-color: white;
+        color: black;
+        border-bottom: 1px solid black;
+    }
+
+    main table tr:last-of-type {
+        border: none;
+    }
+
+    main table tr:first-of-type input::placeholder,
+    main table tr:first-of-type:hover {
+        background-color: white;
+        color: black;
+    }
+
+    main table tr:first-of-type input::placeholder {
+        font-size: 1.5em;
+    }
+
+    main input:invalid,
+    select:invalid {
+        border: none;
+    }
+
+    select::-ms-expand {
+        display: none;
+    }
 }

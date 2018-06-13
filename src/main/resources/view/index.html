@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eGradebook</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -14,8 +15,8 @@
             <h1>Welcome to eGradebook!</h1>
         </figure>
     </header>
-    <div class="container">
-        <nav>
+    <div class="contentBody">
+        <nav class="navbar">
             <ul>
                 <li><a href="#students">Student list</a></li>
                 <li><a href="#courses">Course list</a></li>
@@ -26,61 +27,68 @@
             <form>
                 <table>
                     <tr>
-                        <th>Lp</th>
-                        <th><input type="number" name="index" placeholder="Index"></th>
-                        <th><input type="text" name="firstName" placeholder="John"></th>
-                        <th><input type="text" name="lastName" placeholder="Doe"></th>
-                        <th><input type="text" name="birthday" placeholder="Birthday" onfocus="(this.type='date')"
+                        <th class="lp-col">Lp</th>
+                        <th class="index-col"><input type="number" name="index" placeholder="Index"></th>
+                        <th class="firstname-col"><input type="text" name="firstName" placeholder="John"></th>
+                        <th class="lastname-col"><input type="text" name="lastName" placeholder="Doe"></th>
+                        <th class="birthday-col"><input type="text" name="birthday" placeholder="Birthday"
+                                                        onfocus="(this.type='date')"
                                    onblur="(this.type='text')"></th>
-                        <th><input type="text" name="action" value="Action" readonly></th>
+                        <th class="actions-col"><input type="text" name="action" value="Action" readonly></th>
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td><input type="number" name="index" value="122363" readonly></td>
-                        <td><input type="text" name="firstName" value="Dawid"></td>
-                        <td><input type="text" name="lastName" value="Smarzewski"></td>
-                        <td><input type="text" name="birthday" onfocus="(this.type='date')" onblur="(this.type='text')"
+                        <td class="lp-col">1</td>
+                        <td class="index-col"><input type="number" name="index" value="122363" readonly></td>
+                        <td class="firstname-col"><input type="text" name="firstName" value="Dawid"></td>
+                        <td class="lastname-col"><input type="text" name="lastName" value="Smarzewski"></td>
+                        <td class="birthday-col"><input type="text" name="birthday" onfocus="(this.type='date')"
+                                                        onblur="(this.type='text')"
                                    value="1995-07-15"></td>
-                        <td>
+                        <td class="actions-col">
                             <button onclick="window.location.href='#grades'">See grades</button>
                             <button type="button">Modify</button>
                             <button type="button">Delete</button>
                         </td>
                     </tr>
                     <tr>
-                        <td>2</td>
-                        <td><input type="number" name="index" value="122121" readonly></td>
-                        <td><input type="text" name="firstName" value="David"></td>
-                        <td><input type="text" name="lastName" value="Schwimmer"></td>
-                        <td><input type="text" name="birthday" onfocus="(this.type='date')" onblur="(this.type='text')"
+                        <td class="lp-col">2</td>
+                        <td class="index-col"><input type="number" name="index" value="122121" readonly></td>
+                        <td class="firstname-col"><input type="text" name="firstName" value="David"></td>
+                        <td class="lastname-col"><input type="text" name="lastName" value="Schwimmer"></td>
+                        <td class="birthday-col"><input type="text" name="birthday" onfocus="(this.type='date')"
+                                                        onblur="(this.type='text')"
                                    value="1990-02-21"></td>
-                        <td>
+                        <td class="actions-col">
                             <button onclick="window.location.href='#grades'">See grades</button>
                             <button type="button">Modify</button>
                             <button type="button">Delete</button>
                         </td>
                     </tr>
                     <tr>
-                        <td>3</td>
-                        <td><input type="number" name="index" value="122777" readonly></td>
-                        <td><input type="text" name="firstName" value="Matt"></td>
-                        <td><input type="text" name="lastName" value="LeBlanc"></td>
-                        <td><input type="text" name="birthday" onfocus="(this.type='date')" onblur="(this.type='text')"
+                        <td class="lp-col">3</td>
+                        <td class="index-col"><input type="number" name="index" value="122777" readonly></td>
+                        <td class="firstname-col"><input type="text" name="firstName" value="Matt"></td>
+                        <td class="lastname-col"><input type="text" name="lastName" value="LeBlanc"></td>
+                        <td class="birthday-col"><input type="text" name="birthday" onfocus="(this.type='date')"
+                                                        onblur="(this.type='text')"
                                    value="1964-02-23"></td>
-                        <td>
+                        <td class="actions-col">
                             <button onclick="window.location.href='#grades'">See grades</button>
                             <button type="button">Modify</button>
                             <button type="button">Delete</button>
                         </td>
                     </tr>
                     <tr>
-                        <td>4</td>
-                        <td><input type="number" name="index" placeholder="Index" required></td>
-                        <td><input type="text" name="firstName" placeholder="First name" required></td>
-                        <td><input type="text" name="lastName" placeholder="Last name" required></td>
-                        <td><input type="text" name="birthday" placeholder="Birthday" onfocus="(this.type='date')"
+                        <td class="lp-col">4</td>
+                        <td class="index-col"><input type="number" name="index" placeholder="Index" required></td>
+                        <td class="firstname-col"><input type="text" name="firstName" placeholder="First name" required>
+                        </td>
+                        <td class="lastname-col"><input type="text" name="lastName" placeholder="Last name" required>
+                        </td>
+                        <td class="birthday-col"><input type="text" name="birthday" placeholder="Birthday"
+                                                        onfocus="(this.type='date')"
                                    onblur="(this.type='text')" required></td>
-                        <td>
+                        <td class="actions-col">
                             <button type="submit">Add</button>
                         </td>
                     </tr>
@@ -203,16 +211,11 @@
         </article>
     </div>
     <footer>
-        <p>
             <small>
                 eGradeBook created by Dawid C. est. 2018.
                 <br>
                 <a href="http://www2.cs.put.poznan.pl/">Find more info on CS institute website</a>
             </small>
-        </p>
-        <p>
-            <small></small>
-        </p>
     </footer>
 </div>
 </body>
