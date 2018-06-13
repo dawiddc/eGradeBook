@@ -30,7 +30,6 @@ public class Grade {
 
     @Id
     @XmlTransient
-//    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId objectId;
     private long id;
     private float value;

@@ -27,7 +27,6 @@ public class Course {
 
     @Id
     @XmlTransient
-//    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId objectId;
 
     private long id;

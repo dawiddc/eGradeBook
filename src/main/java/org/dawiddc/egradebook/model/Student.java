@@ -32,7 +32,6 @@ public class Student {
 
     @Id
     @XmlTransient
-//    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId id;
 
     @Indexed(name = "index", unique = true)
