@@ -2,8 +2,9 @@ language: java
 sudo: false
 script: "mvn cobertura:cobertura"
 
-install:
-  -
+install: true
+
+script: mvn clean package -DskipTests=true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
