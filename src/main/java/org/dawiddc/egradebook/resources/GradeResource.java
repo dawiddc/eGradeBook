@@ -52,13 +52,10 @@ public class GradeResource {
 
         /* Filtering by grade assign date */
         if (value != null && valueRelation != null) {
-            switch (valueRelation.toLowerCase()) {
-                case "greater":
-                    grades = grades.stream().filter(gr -> gr.getValue() > value).collect(Collectors.toList());
-                    break;
-                case "lower":
-                    grades = grades.stream().filter(gr -> gr.getValue() < value).collect(Collectors.toList());
-                    break;
+            if (valueRelation.toLowerCase().equals("greater")) {
+                grades = grades.stream().filter(gr -> gr.getValue() > value).collect(Collectors.toList());
+            } else if (valueRelation.toLowerCase().equals("lower")) {
+                grades = grades.stream().filter(gr -> gr.getValue() < value).collect(Collectors.toList());
             }
         }
 
@@ -74,7 +71,7 @@ public class GradeResource {
         Student student = StudentDBService.getStudent(index);
         if (student == null)
             throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
-        if (student.getGrades() == null || student.getGrades().size() < 1)
+        if (student.getGrades() == null || student.getGrades().isEmpty())
             throw new NotFoundException(new JsonError("Error", "Grade list is empty"));
         Optional<Grade> grade = student.getGrades().stream().filter(g -> g.getId() == id).findFirst();
         if (!grade.isPresent())

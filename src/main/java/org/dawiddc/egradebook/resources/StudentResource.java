@@ -36,7 +36,7 @@ public class StudentResource {
                                    @QueryParam("dateRelation") String dateRelation) {
         List<Student> students = StudentDBService.getAllStudents(firstName, lastName, birthday, dateRelation);
 
-        if ((students == null || students.size() == 0)) {
+        if ((students == null || students.isEmpty())) {
             throw new NotFoundException(new JsonError("Error", "Student list is empty"));
         }
 

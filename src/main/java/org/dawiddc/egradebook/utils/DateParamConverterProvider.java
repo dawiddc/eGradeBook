@@ -12,10 +12,9 @@ import java.util.Date;
 @Provider
 public class DateParamConverterProvider implements ParamConverterProvider {
 
-    private final String format = "yyyy-MM-dd";
+    private final static String format = "yyyy-MM-dd";
 
-    public DateParamConverterProvider() {
-    }
+    public DateParamConverterProvider() { }
 
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {

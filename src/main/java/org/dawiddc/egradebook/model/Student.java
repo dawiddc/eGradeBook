@@ -7,6 +7,7 @@ import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.IndexOptions;
 import org.mongodb.morphia.annotations.Indexed;
 
 import javax.validation.constraints.NotNull;
@@ -34,7 +35,7 @@ public class Student {
     @XmlTransient
     private ObjectId id;
 
-    @Indexed(name = "index", unique = true)
+    @Indexed(options = @IndexOptions(name = "index", unique = true))
     private long index;
     @NotNull
     private String firstName;

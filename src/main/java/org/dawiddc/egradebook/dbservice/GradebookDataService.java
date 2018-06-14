@@ -83,7 +83,7 @@ public class GradebookDataService {
 
     public void createMockModel() {
 
-        if (!(datastore.getCount(IdGenerator.class) > 0)) {
+        if ((datastore.getCount(IdGenerator.class) < 0)) {
             IdGenerator idGenerator = new IdGenerator();
             idGenerator.setStudentIndex(0);
             idGenerator.setCourseId(0);

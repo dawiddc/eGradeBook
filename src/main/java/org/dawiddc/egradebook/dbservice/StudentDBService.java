@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
 public class StudentDBService {
     private static Datastore datastore = MorphiaDatastore.getDatastore();
 
+    private StudentDBService() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Getting all students from database
      *
@@ -40,6 +44,8 @@ public class StudentDBService {
                     break;
                 case "before":
                     query.filter("birthday <", birthday);
+                    break;
+                default:
                     break;
             }
         }

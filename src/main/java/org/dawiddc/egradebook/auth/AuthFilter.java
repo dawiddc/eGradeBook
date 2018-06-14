@@ -28,10 +28,11 @@ public class AuthFilter implements ContainerRequestFilter {
     }
 
     private User authenticate(ContainerRequestContext filterContext) {
+        final String student = "student";
         // Extract authentication credentials
         String authentication = filterContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         if (authentication == null || !authentication.startsWith("Basic ")) {
-            return new User("student", "student");
+            return new User(student, student);
         }
         authentication = authentication.substring("Basic ".length());
         String[] values = new String(DatatypeConverter.parseBase64Binary(authentication), Charset.forName("ASCII")).split(":");
@@ -47,11 +48,12 @@ public class AuthFilter implements ContainerRequestFilter {
         }
         // Validate the extracted credentials
         User user;
-
-        if (username.equals("lecturer") && password.equals("password")) {
+        final String lecturerUsername = "lecturer";
+        final String lecturerPassword = "password";
+        if (username.equals(lecturerUsername) && password.equals(lecturerPassword)) {
             user = new User("lecturer", "lecturer");
         } else {
-            user = new User("student", "student");
+            user = new User(student, student);
         }
         return user;
     }

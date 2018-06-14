@@ -5,10 +5,12 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 public class MorphiaDatastore {
+    static {
 
+    }
     private static Datastore datastore;
 
-    private MorphiaDatastore() {
+    static {
         final Morphia morphia = new Morphia();
         morphia.mapPackage("com.dawiddc.egradebook.model");
         datastore = morphia.createDatastore(new MongoClient("localhost", 8004), "egradebook");

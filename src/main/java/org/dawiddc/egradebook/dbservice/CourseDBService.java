@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 public class CourseDBService {
     private static final Datastore datastore = MorphiaDatastore.getDatastore();
 
+    private CourseDBService() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static List<Course> getCourses(String lecturer) {
         Query<Course> query = datastore.find(Course.class);
 
