@@ -49,8 +49,7 @@ public class AuthFilter implements ContainerRequestFilter {
         // Validate the extracted credentials
         User user;
         final String lecturerUsername = "lecturer";
-        final String lecturerPassword = "password";
-        if (username.equals(lecturerUsername) && password.equals(lecturerPassword)) {
+        if (username.equals(lecturerUsername) && password.equals("password")) {
             user = new User("lecturer", "lecturer");
         } else {
             user = new User(student, student);

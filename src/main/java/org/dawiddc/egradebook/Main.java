@@ -40,7 +40,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
-        logger.log(Level.INFO, String.format("Jersey app started with WADL available at "
+        logger.log(Level.INFO, () -> String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         //noinspection ResultOfMethodCallIgnored
         System.in.read();

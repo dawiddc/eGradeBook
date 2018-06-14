@@ -5,9 +5,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 public class MorphiaDatastore {
-    static {
 
-    }
     private static Datastore datastore;
 
     static {
@@ -15,6 +13,10 @@ public class MorphiaDatastore {
         morphia.mapPackage("com.dawiddc.egradebook.model");
         datastore = morphia.createDatastore(new MongoClient("localhost", 8004), "egradebook");
         datastore.ensureIndexes();
+    }
+
+    private MorphiaDatastore() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static Datastore getDatastore() {

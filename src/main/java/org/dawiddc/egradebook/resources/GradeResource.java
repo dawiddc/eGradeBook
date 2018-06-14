@@ -52,9 +52,9 @@ public class GradeResource {
 
         /* Filtering by grade assign date */
         if (value != null && valueRelation != null) {
-            if (valueRelation.toLowerCase().equals("greater")) {
+            if (valueRelation.equalsIgnoreCase("greater")) {
                 grades = grades.stream().filter(gr -> gr.getValue() > value).collect(Collectors.toList());
-            } else if (valueRelation.toLowerCase().equals("lower")) {
+            } else if (valueRelation.equalsIgnoreCase("lower")) {
                 grades = grades.stream().filter(gr -> gr.getValue() < value).collect(Collectors.toList());
             }
         }

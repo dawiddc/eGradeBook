@@ -12,7 +12,7 @@ import java.util.Date;
 @Provider
 public class DateParamConverterProvider implements ParamConverterProvider {
 
-    private final static String format = "yyyy-MM-dd";
+    private static final String FORMAT = "yyyy-MM-dd";
 
     public DateParamConverterProvider() { }
 
@@ -30,7 +30,7 @@ public class DateParamConverterProvider implements ParamConverterProvider {
                 if (value == null)
                     return null;
 
-                SimpleDateFormat formatter = new SimpleDateFormat(format);
+                SimpleDateFormat formatter = new SimpleDateFormat(FORMAT);
                 try {
                     return formatter.parse(value);
                 } catch (Exception ex) {
@@ -40,7 +40,7 @@ public class DateParamConverterProvider implements ParamConverterProvider {
 
             @Override
             public String toString(Date date) {
-                return new SimpleDateFormat(format).format(date);
+                return new SimpleDateFormat(FORMAT).format(date);
             }
         };
     }
