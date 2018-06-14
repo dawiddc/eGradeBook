@@ -2,5 +2,8 @@ language: java
 sudo: false
 script: "mvn cobertura:cobertura"
 
+install:
+  -
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
