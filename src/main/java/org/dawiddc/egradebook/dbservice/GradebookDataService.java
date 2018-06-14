@@ -16,73 +16,13 @@ import java.util.List;
 public class GradebookDataService {
 
     private static final GradebookDataService ourInstance = new GradebookDataService();
-    private final List<Student> studentsList = new ArrayList<>();
-    private final List<Course> coursesList = new ArrayList<>();
+    private static final List<Student> studentsList = new ArrayList<>();
+    private static final List<Course> coursesList = new ArrayList<>();
     private static List<Grade> grades = new ArrayList<>();
 
     private static Datastore datastore = MorphiaDatastore.getDatastore();
 
-    public static GradebookDataService getInstance() {
-        return ourInstance;
-    }
-
-    private static long getStudentIndex() {
-        Query<IdGenerator> query = datastore.find(IdGenerator.class);
-        long index = query.get().getStudentIndex() + 1;
-        UpdateOperations<IdGenerator> updateOperations = datastore.createUpdateOperations(IdGenerator.class).set("studentIndex", index);
-        datastore.findAndModify(query, updateOperations);
-
-        return index;
-    }
-
-    private static int getCourseId() {
-        Query<IdGenerator> query = datastore.find(IdGenerator.class);
-        int id = query.get().getCourseId() + 1;
-        UpdateOperations<IdGenerator> updateOperations = datastore.createUpdateOperations(IdGenerator.class).set("courseId", id);
-        datastore.findAndModify(query, updateOperations);
-
-        return id;
-    }
-
-    public static int getGradeId() {
-        Query<IdGenerator> query = datastore.find(IdGenerator.class);
-        int id = query.get().getGradeId() + 1;
-        UpdateOperations<IdGenerator> updateOperations = datastore.createUpdateOperations(IdGenerator.class).set("gradeId", id);
-        datastore.findAndModify(query, updateOperations);
-
-        return id;
-    }
-
-    public static long getFirstAvailableStudentIndex() {
-        boolean isFound = true;
-        long index = 0;
-        while (isFound) {
-            isFound = false;
-            index = getStudentIndex();
-            if (StudentDBService.getStudent(index) != null)
-                isFound = true;
-        }
-        return index;
-    }
-
-    public static int getFirstAvailableCourseId() {
-        boolean isFound = true;
-        int id = 0;
-        while (isFound) {
-            isFound = false;
-            id = getCourseId();
-            if (CourseDBService.getCourseById(id) != null)
-                isFound = true;
-        }
-        return id;
-    }
-
-    public static int getFirstAvailableGradeId() {
-        return getGradeId();
-    }
-
-    public void createMockModel() {
-
+    static {
         if ((datastore.getCount(IdGenerator.class) < 0)) {
             IdGenerator idGenerator = new IdGenerator();
             idGenerator.setStudentIndex(0);
@@ -179,6 +119,65 @@ public class GradebookDataService {
 
             datastore.save(studentsList);
         }
+    }
+
+    public static GradebookDataService getInstance() {
+        return ourInstance;
+    }
+
+    private static long getStudentIndex() {
+        Query<IdGenerator> query = datastore.find(IdGenerator.class);
+        long index = query.get().getStudentIndex() + 1;
+        UpdateOperations<IdGenerator> updateOperations = datastore.createUpdateOperations(IdGenerator.class).set("studentIndex", index);
+        datastore.findAndModify(query, updateOperations);
+
+        return index;
+    }
+
+    private static int getCourseId() {
+        Query<IdGenerator> query = datastore.find(IdGenerator.class);
+        int id = query.get().getCourseId() + 1;
+        UpdateOperations<IdGenerator> updateOperations = datastore.createUpdateOperations(IdGenerator.class).set("courseId", id);
+        datastore.findAndModify(query, updateOperations);
+
+        return id;
+    }
+
+    public static int getGradeId() {
+        Query<IdGenerator> query = datastore.find(IdGenerator.class);
+        int id = query.get().getGradeId() + 1;
+        UpdateOperations<IdGenerator> updateOperations = datastore.createUpdateOperations(IdGenerator.class).set("gradeId", id);
+        datastore.findAndModify(query, updateOperations);
+
+        return id;
+    }
+
+    public static long getFirstAvailableStudentIndex() {
+        boolean isFound = true;
+        long index = 0;
+        while (isFound) {
+            isFound = false;
+            index = getStudentIndex();
+            if (StudentDBService.getStudent(index) != null)
+                isFound = true;
+        }
+        return index;
+    }
+
+    public static int getFirstAvailableCourseId() {
+        boolean isFound = true;
+        int id = 0;
+        while (isFound) {
+            isFound = false;
+            id = getCourseId();
+            if (CourseDBService.getCourseById(id) != null)
+                isFound = true;
+        }
+        return id;
+    }
+
+    public static int getFirstAvailableGradeId() {
+        return getGradeId();
     }
 
 }

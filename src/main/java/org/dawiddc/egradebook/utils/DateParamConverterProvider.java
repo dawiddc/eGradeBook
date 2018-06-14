@@ -14,8 +14,6 @@ public class DateParamConverterProvider implements ParamConverterProvider {
 
     private static final String FORMAT = "yyyy-MM-dd";
 
-    public DateParamConverterProvider() { }
-
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
 
@@ -34,7 +32,7 @@ public class DateParamConverterProvider implements ParamConverterProvider {
                 try {
                     return formatter.parse(value);
                 } catch (Exception ex) {
-                    throw new WebApplicationException("Bad formatted date", 400);
+                    throw new WebApplicationException("Badly formatted date", 400);
                 }
             }
 

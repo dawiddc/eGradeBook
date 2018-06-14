@@ -22,6 +22,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @PermitAll
@@ -29,6 +31,9 @@ import java.util.stream.Collectors;
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class GradeResource {
+
+    private static final Logger LOGGER = Logger.getLogger(GradeResource.class.getName());
+
 
     @GET
     @RolesAllowed("lecturer")
@@ -103,7 +108,7 @@ public class GradeResource {
         try {
             url = new URI(stringUri);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
 
         return Response.created(url).build();
@@ -147,7 +152,7 @@ public class GradeResource {
             try {
                 url = new URI(stringUri);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "URI cast Exception", e);
             }
 
             return Response.created(url).build();

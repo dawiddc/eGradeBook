@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @PermitAll
 @Path("courses")
@@ -24,6 +26,7 @@ import java.util.List;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class CourseResource {
 
+    private static final Logger LOGGER = Logger.getLogger(CourseResource.class.getName());
 
     /**
      * returns courses list, can be filtered by lecturer
@@ -35,7 +38,7 @@ public class CourseResource {
     public Response getCoursesList(@QueryParam("lecturer") String lecturer) {
         List<Course> courses = CourseDBService.getCourses(lecturer);
 
-        if (courses == null || courses.size() == 0) {
+        if (courses == null || courses.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No courses found").build();
         }
 
@@ -72,7 +75,7 @@ public class CourseResource {
         try {
             url = new URI(stringUri);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
 
         return Response.created(url).build();
@@ -98,7 +101,7 @@ public class CourseResource {
         try {
             url = new URI(stringUri);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
         return Response.created(url).build();
     }

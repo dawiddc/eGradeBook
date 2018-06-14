@@ -22,12 +22,17 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @PermitAll
 @Path("students")
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class StudentResource {
+
+    private static final Logger LOGGER = Logger.getLogger(StudentResource.class.getName());
+
 
     @GET
     public Response getStudentList(@QueryParam("firstName") String firstName,
@@ -68,7 +73,7 @@ public class StudentResource {
         try {
             url = new URI(stringUri);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
 
         return Response.created(url).build();
@@ -111,7 +116,7 @@ public class StudentResource {
             try {
                 url = new URI(stringUri);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "URI cast Exception", e);
             }
             return Response.created(url).build();
         }
