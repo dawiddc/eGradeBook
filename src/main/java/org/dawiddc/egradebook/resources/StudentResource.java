@@ -65,6 +65,9 @@ public class StudentResource {
     @POST
     public Response postStudent(@NotNull Student student) {
         student.setIndex(GradebookDataService.getFirstAvailableStudentIndex());
+        if (student.getGrades() == null) {
+            student.setGrades(new ArrayList<>());
+        }
         assignCourses(student);
         StudentDBService.addStudent(student);
 
@@ -76,7 +79,7 @@ public class StudentResource {
             LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
 
-        return Response.created(url).build();
+        return Response.created(url).entity(student).build();
     }
 
     private void assignCourses(@NotNull Student student) {
@@ -95,6 +98,9 @@ public class StudentResource {
     @RolesAllowed("lecturer")
     public Response updateStudent(@PathParam("index") long index, @NotNull Student newStudent) {
         Student oldStudent = StudentDBService.getStudent(index);
+        if (newStudent.getGrades() == null) {
+            newStudent.setGrades(new ArrayList<>());
+        }
         assignCourses(newStudent);
         if (newStudent.getGrades() == null)
             newStudent.setGrades(new ArrayList<>());
@@ -118,7 +124,7 @@ public class StudentResource {
             } catch (URISyntaxException e) {
                 LOGGER.log(Level.SEVERE, "URI cast Exception", e);
             }
-            return Response.created(url).build();
+            return Response.created(url).entity(newStudent).build();
         }
     }
 

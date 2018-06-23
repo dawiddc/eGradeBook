@@ -1,4 +1,4 @@
-package org.dawiddc.egradebook.auth;
+package org.dawiddc.egradebook.filters;
 
 
 import javax.inject.Inject;
@@ -56,6 +56,7 @@ public class AuthFilter implements ContainerRequestFilter {
         }
         return user;
     }
+
     class Authorizer implements SecurityContext {
 
 

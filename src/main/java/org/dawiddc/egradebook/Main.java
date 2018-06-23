@@ -1,7 +1,8 @@
 package org.dawiddc.egradebook;
 
-import org.dawiddc.egradebook.auth.AuthFilter;
 import org.dawiddc.egradebook.exception.RestError;
+import org.dawiddc.egradebook.filters.AuthFilter;
+import org.dawiddc.egradebook.filters.CustomHeadersCorsFilter;
 import org.dawiddc.egradebook.utils.DateParamConverterProvider;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -25,9 +26,10 @@ public class Main {
                 .packages("org.dawiddc.egradebook")
                 .packages("org.glassfish.jersey.examples.linking")
                 .registerClasses(
-                        DeclarativeLinkingFeature.class,
                         RestError.class,
                         AuthFilter.class,
+                        CustomHeadersCorsFilter.class,
+                        DeclarativeLinkingFeature.class,
                         DateParamConverterProvider.class);
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

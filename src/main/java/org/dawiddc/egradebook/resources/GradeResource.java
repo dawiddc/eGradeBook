@@ -47,7 +47,7 @@ public class GradeResource {
 
         List<Grade> grades = student.getGrades();
         if (grades == null || grades.isEmpty()) {
-            throw new NotFoundException(new JsonError("Error", "This student has no grades"));
+            grades = new ArrayList<>();
         }
 
         /* Filtering by grade's course name */

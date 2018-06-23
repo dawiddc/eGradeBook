@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eGradebook</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/knockout.js"></script>
+    <script type="text/javascript" src="scripts/mapping.js"></script>
+    <script type="text/javascript" src="scripts/script.js"></script>
+    <title>eGradebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -24,128 +28,83 @@
         </nav>
         <article id="students">
             <h2>Student list</h2>
-            <form>
-                <table>
-                    <tr>
-                        <th class="lp-col">Lp</th>
-                        <th class="index-col"><input type="number" name="index" placeholder="Index"></th>
-                        <th class="firstname-col"><input type="text" name="firstName" placeholder="John"></th>
-                        <th class="lastname-col"><input type="text" name="lastName" placeholder="Doe"></th>
-                        <th class="birthday-col"><input type="text" name="birthday" placeholder="Birthday"
-                                                        onfocus="(this.type='date')"
-                                   onblur="(this.type='text')"></th>
-                        <th class="actions-col"><input type="text" name="action" value="Action" readonly></th>
-                    </tr>
-                    <tr>
-                        <td class="lp-col">1</td>
-                        <td class="index-col"><input type="number" name="index" value="122363" readonly></td>
-                        <td class="firstname-col"><input type="text" name="firstName" value="Dawid"></td>
-                        <td class="lastname-col"><input type="text" name="lastName" value="Smarzewski"></td>
-                        <td class="birthday-col"><input type="text" name="birthday" onfocus="(this.type='date')"
-                                                        onblur="(this.type='text')"
-                                   value="1995-07-15"></td>
-                        <td class="actions-col">
-                            <button onclick="window.location.href='#grades'">See grades</button>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="lp-col">2</td>
-                        <td class="index-col"><input type="number" name="index" value="122121" readonly></td>
-                        <td class="firstname-col"><input type="text" name="firstName" value="David"></td>
-                        <td class="lastname-col"><input type="text" name="lastName" value="Schwimmer"></td>
-                        <td class="birthday-col"><input type="text" name="birthday" onfocus="(this.type='date')"
-                                                        onblur="(this.type='text')"
-                                   value="1990-02-21"></td>
-                        <td class="actions-col">
-                            <button onclick="window.location.href='#grades'">See grades</button>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="lp-col">3</td>
-                        <td class="index-col"><input type="number" name="index" value="122777" readonly></td>
-                        <td class="firstname-col"><input type="text" name="firstName" value="Matt"></td>
-                        <td class="lastname-col"><input type="text" name="lastName" value="LeBlanc"></td>
-                        <td class="birthday-col"><input type="text" name="birthday" onfocus="(this.type='date')"
-                                                        onblur="(this.type='text')"
-                                   value="1964-02-23"></td>
-                        <td class="actions-col">
-                            <button onclick="window.location.href='#grades'">See grades</button>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr class="inputRow">
+            <table>
+                <tr>
+                    <th class="lp-col">Lp</th>
+                    <th class="index-col"><input type="number" name="index" placeholder="Index"></th>
+                    <th class="firstname-col"><input type="text" name="firstName" placeholder="John"></th>
+                    <th class="lastname-col"><input type="text" name="lastName" placeholder="Doe"></th>
+                    <th class="birthday-col"><input type="text" name="birthday" placeholder="Birthday"
+                                                    onfocus="(this.type='date')"
+                                                    onblur="(this.type='text')"></th>
+                    <th class="actions-col"><input type="text" name="action" value="Action" readonly></th>
+                </tr>
+                <tbody data-bind="foreach: students">
+                <tr>
+                    <td data-bind="text: $index() + 1" class="lp-col"></td>
+                    <td><input data-bind="value: index" class="index-col" type="number" name="index" readonly></td>
+                    <td><input data-bind="value: firstName" class="firstname-col" type="text" name="firstName"></td>
+                    <td><input data-bind="value: lastName" class="lastname-col" type="text" name="lastName"></td>
+                    <td><input data-bind="value: birthday" class="birthday-col" type="text" name="birthday"
+                               onfocus="(this.type='date')"
+                               onblur="(this.type='text')"></td>
+                    <td class="actions-col">
+                        <button data-bind="click:  $parent.students.getGrades">See grades</button>
+                        <button type="button" data-bind="click:  $parent.students.delete">Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+                <tr class="inputRow">
+                    <form data-bind="submit: students.add">
                         <td class="lp-col">4</td>
-                        <td class="index-col"><input type="number" name="index" placeholder="Index" required></td>
+                        <td class="index-col"><input type="number" name="index" placeholder="Index"></td>
                         <td class="firstname-col"><input type="text" name="firstName" placeholder="First name" required>
                         </td>
                         <td class="lastname-col"><input type="text" name="lastName" placeholder="Last name" required>
                         </td>
                         <td class="birthday-col"><input type="text" name="birthday" placeholder="Birthday"
                                                         onfocus="(this.type='date')"
-                                   onblur="(this.type='text')" required></td>
+                                                        onblur="(this.type='text')" required></td>
                         <td class="actions-col">
                             <button type="submit">Add</button>
                         </td>
-                    </tr>
-                </table>
-            </form>
+                    </form>
+                </tr>
+            </table>
         </article>
         <article id="courses">
             <h2>Course list</h2>
-            <form>
-                <table>
-                    <tr>
-                        <th class="lp-col">Lp</th>
-                        <th><input type="text" name="name" placeholder="Name"></th>
-                        <th><input type="text" name="lecturer" placeholder="Lecturer"></th>
-                        <th class="actions-col"><input type="text" name="action" placeholder="Actions" readonly></th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td><input type="text" name="name" value="Technologie Programistyczne"></td>
-                        <td><input type="text" name="lecturer" value="dr inż. Tomasz Pawlak"></td>
-                        <td>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><input type="text" name="name" value="AMiM"></td>
-                        <td><input type="text" name="lecturer" value="dr inż. Bartłomiej Prędki"></td>
-                        <td>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><input type="text" name="name" value="Aplikacje lokalne"></td>
-                        <td><input type="text" name="lecturer" value="dr inż. Piotr Zielniewicz"></td>
-                        <td>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
+            <table>
+                <tr>
+                    <th class="lp-col">Lp</th>
+                    <th><input type="text" name="name" placeholder="Name"></th>
+                    <th><input type="text" name="lecturer" placeholder="Lecturer"></th>
+                    <th class="actions-col"><input type="text" name="action" placeholder="Actions" readonly></th>
+                </tr>
+                <tbody data-bind="foreach: courses">
+                <tr>
+                    <td data-bind=" text: $index() + 1"></td>
+                    <td><input data-bind="value: name" type="text" name="name"></td>
+                    <td><input data-bind="value: lecturer" type="text" name="lecturer"></td>
+                    <td>
+                        <button type="button" data-bind="click: $parent.courses.delete">Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+                <tr>
+                    <form data-bind="submit: courses.add">
+                        <td></td>
                         <td><input type="text" name="name" placeholder="Course name" required></td>
                         <td><input type="text" name="lecturer" placeholder="Lecturer" required></td>
                         <td>
                             <button type="submit">Add course</button>
                         </td>
-                    </tr>
-                </table>
-            </form>
+                    </form>
+                </tr>
+            </table>
         </article>
         <article id="grades">
             <h2>Grade list</h2>
-            <form>
                 <table>
                     <tr>
                         <th><input type="text" name="course" placeholder="Course"></th>
@@ -153,69 +112,50 @@
                         <th><input type="text" name="date" placeholder="Acquire date"></th>
                         <th class="actions-col"><input type="text" name="action" value="Actions" readonly></th>
                     </tr>
+                    <tbody data-bind="foreach: grades">
                     <tr>
                         <td>
-                            <select>
-                                <option selected="selected">Technologie Programistyczne</option>
-                                <option>AMiM</option>
-                                <option>Aplikacje lokalne</option>
+                            <select name="id" required data-bind="options: $parent.courses,
+                                                  optionsText: function(i) { return i.name(); },
+                                                  optionsValue: function(i) { return i.id(); },
+                                                  optionsCaption: 'Choose course',
+                                                  value: course.id ">
                             </select>
                         </td>
-                        <td><input type="number" name="value" value="5" step="0.5" min="2" max="5"></td>
-                        <td><input type="text" name="date" value="12.05.2018"></td>
+                        <td><input type="number" name="value" data-bind="value: value" step="0.5" min="2" max="5"></td>
+                        <td><input type="text" name="date" data-bind="value: date"></td>
                         <td>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
+                            <button type="button" data-bind="click: $parent.grades.delete">Delete</button>
                         </td>
                     </tr>
+                    </tbody>
                     <tr>
-                        <td>
-                            <select>
-                                <option>Technologie Programistyczne</option>
-                                <option selected="selected">AMiM</option>
-                                <option>Aplikacje lokalne</option>
-                            </select>
-                        </td>
-                        <td><input type="number" name="value" value="5" step="0.5" min="2.0" max="5.0"></td>
-                        <td><input type="text" name="date" value="17.05.2018"></td>
-                        <td>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select>
-                                <option>Technologie Programistyczne</option>
-                                <option>AMiM</option>
-                                <option selected="selected">Aplikacje lokalne</option>
-                            </select>
-                        </td>
-                        <td><input type="number" name="value" value="5" step="0.5" min="2.0" max="5.0"></td>
-                        <td><input type="text" name="date" value="22.01.2018"></td>
-                        <td>
-                            <button type="button">Modify</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" name="course" placeholder="Course name"></td>
-                        <td><input type="text" name="value" placeholder="Grade"></td>
-                        <td><input type="text" name="date" placeholder="Date"></td>
-                        <td>
-                            <button type="submit">Assign grade</button>
-                        </td>
+                        <form data-bind="submit: grades.add">
+                            <td>
+                                <select name="id" required data-bind="options: viewModel.courses,
+                                                      optionsText: function(i) { return i.name(); },
+                                                      optionsValue: function(i) { return i.id(); },
+                                                      optionsCaption: 'Choose subject...',
+                                                      value: viewModel.grades.selectedCourse">
+                                </select>
+                            </td>
+                            <td><input type="number" name="value" value="2.0" step="0.5" min="2.0" max="5.0"/></td>
+                            <td><input type="text" name="date" placeholder="Date" onfocus="(this.type='date')"
+                                       onblur="(this.type='text')" required/></td>
+                            <td>
+                                <button type="submit">Assign grade</button>
+                            </td>
+                        </form>
                     </tr>
                 </table>
-            </form>
         </article>
     </div>
     <footer>
-            <small>
-                eGradeBook created by Dawid C. est. 2018.
-                <br>
-                <a href="http://www2.cs.put.poznan.pl/">Find more info on CS institute website</a>
-            </small>
+        <small>
+            eGradeBook created by Dawid C. est. 2018.
+            <br>
+            <a href="http://www2.cs.put.poznan.pl/">Find more info on CS institute website</a>
+        </small>
     </footer>
 </div>
 </body>
