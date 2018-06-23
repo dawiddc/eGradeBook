@@ -23,14 +23,13 @@ public class GradebookDataService {
     private static Datastore datastore = MorphiaDatastore.getDatastore();
 
     static {
-        if ((datastore.getCount(IdGenerator.class) < 0)) {
+        if ((datastore.getCount(IdGenerator.class) < 1)) {
             IdGenerator idGenerator = new IdGenerator();
             idGenerator.setStudentIndex(0);
             idGenerator.setCourseId(0);
             idGenerator.setGradeId(0);
             datastore.save(idGenerator);
         }
-
         if (datastore.getCount(Student.class) < 1) {
             coursesList.add(new Course.CourseBuilder().name("TPSI").lecturer("Tomasz Pawlak").id(getCourseId()).build());
             coursesList.add(new Course.CourseBuilder().name("Math").lecturer("Matt Jepard").id(getCourseId()).build());

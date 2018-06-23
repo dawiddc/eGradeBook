@@ -29,16 +29,23 @@
         <article id="students">
             <h2>Student list</h2>
             <table>
+                <thead>
                 <tr>
                     <th class="lp-col">Lp</th>
-                    <th class="index-col"><input type="number" name="index" placeholder="Index"></th>
-                    <th class="firstname-col"><input type="text" name="firstName" placeholder="John"></th>
-                    <th class="lastname-col"><input type="text" name="lastName" placeholder="Doe"></th>
-                    <th class="birthday-col"><input type="text" name="birthday" placeholder="Birthday"
+                    <th class="index-col"><input data-bind="textInput: viewModel.students.getIndex"
+                                                 type="text" name="indexColumn" placeholder="Index"></th>
+                    <th class="firstname-col"><input data-bind="textInput: viewModel.students.queryParams.firstName"
+                                                     type="text" name="firstNameColumn" placeholder="John"></th>
+                    <th class="lastname-col"><input data-bind="textInput: viewModel.students.queryParams.lastName"
+                                                    type="text" name="lastNameColumn" placeholder="Doe"></th>
+                    <th class="birthday-col"><input data-bind="textInput: viewModel.students.queryParams.birthday"
+                                                    type="text" name="birthdayColumn" placeholder="Birthday"
                                                     onfocus="(this.type='date')"
                                                     onblur="(this.type='text')"></th>
-                    <th class="actions-col"><input type="text" name="action" value="Action" readonly></th>
+
+                    <th class="actions-col">Actions</th>
                 </tr>
+                </thead>
                 <tbody data-bind="foreach: students">
                 <tr>
                     <td data-bind="text: $index() + 1" class="lp-col"></td>
@@ -56,8 +63,8 @@
                 </tbody>
                 <tr class="inputRow">
                     <form data-bind="submit: students.add">
-                        <td class="lp-col">4</td>
-                        <td class="index-col"><input type="number" name="index" placeholder="Index"></td>
+                        <td class="lp-col"></td>
+                        <td class="index-col"><input type="number" name="index" readonly></td>
                         <td class="firstname-col"><input type="text" name="firstName" placeholder="First name" required>
                         </td>
                         <td class="lastname-col"><input type="text" name="lastName" placeholder="Last name" required>
@@ -75,12 +82,16 @@
         <article id="courses">
             <h2>Course list</h2>
             <table>
+                <thead>
                 <tr>
                     <th class="lp-col">Lp</th>
-                    <th><input type="text" name="name" placeholder="Name"></th>
-                    <th><input type="text" name="lecturer" placeholder="Lecturer"></th>
-                    <th class="actions-col"><input type="text" name="action" placeholder="Actions" readonly></th>
+                    <th><input data-bind="textInput: viewModel.courses.queryParams.name" type="text"
+                               name="nameColumn" placeholder="Name"></th>
+                    <th><input data-bind="textInput: viewModel.courses.queryParams.lecturer"
+                               type="text" name="lecturerColumn" placeholder="Lecturer"></th>
+                    <th class="actions-col">Actions</th>
                 </tr>
+                </thead>
                 <tbody data-bind="foreach: courses">
                 <tr>
                     <td data-bind=" text: $index() + 1"></td>
@@ -105,49 +116,51 @@
         </article>
         <article id="grades">
             <h2>Grade list</h2>
-                <table>
-                    <tr>
-                        <th><input type="text" name="course" placeholder="Course"></th>
-                        <th><input type="number" name="value" placeholder="Grade"></th>
-                        <th><input type="text" name="date" placeholder="Acquire date"></th>
-                        <th class="actions-col"><input type="text" name="action" value="Actions" readonly></th>
-                    </tr>
-                    <tbody data-bind="foreach: grades">
-                    <tr>
-                        <td>
-                            <select name="id" required data-bind="options: $parent.courses,
+            <table>
+                <thead>
+                <tr>
+                    <th><input type="text" name="course" placeholder="Course"></th>
+                    <th><input type="number" name="value" placeholder="Grade"></th>
+                    <th><input type="text" name="date" placeholder="Acquire date"></th>
+                    <th class="actions-col">Actions</th>
+                </tr>
+                </thead>
+                <tbody data-bind="foreach: grades">
+                <tr>
+                    <td>
+                        <select name="id" required data-bind="options: $parent.courses,
                                                   optionsText: function(i) { return i.name(); },
                                                   optionsValue: function(i) { return i.id(); },
                                                   optionsCaption: 'Choose course',
                                                   value: course.id ">
-                            </select>
-                        </td>
-                        <td><input type="number" name="value" data-bind="value: value" step="0.5" min="2" max="5"></td>
-                        <td><input type="text" name="date" data-bind="value: date"></td>
+                        </select>
+                    </td>
+                    <td><input type="number" name="value" data-bind="value: value" step="0.5" min="2" max="5"></td>
+                    <td><input type="text" name="date" data-bind="value: date"></td>
+                    <td>
+                        <button type="button" data-bind="click: $parent.grades.delete">Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+                <tr>
+                    <form data-bind="submit: grades.add">
                         <td>
-                            <button type="button" data-bind="click: $parent.grades.delete">Delete</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tr>
-                        <form data-bind="submit: grades.add">
-                            <td>
-                                <select name="id" required data-bind="options: viewModel.courses,
+                            <select name="id" required data-bind="options: viewModel.courses,
                                                       optionsText: function(i) { return i.name(); },
                                                       optionsValue: function(i) { return i.id(); },
                                                       optionsCaption: 'Choose subject...',
                                                       value: viewModel.grades.selectedCourse">
-                                </select>
-                            </td>
-                            <td><input type="number" name="value" value="2.0" step="0.5" min="2.0" max="5.0"/></td>
-                            <td><input type="text" name="date" placeholder="Date" onfocus="(this.type='date')"
-                                       onblur="(this.type='text')" required/></td>
-                            <td>
-                                <button type="submit">Assign grade</button>
-                            </td>
-                        </form>
-                    </tr>
-                </table>
+                            </select>
+                        </td>
+                        <td><input type="number" name="value" value="2.0" step="0.5" min="2.0" max="5.0"/></td>
+                        <td><input type="text" name="date" placeholder="Date" onfocus="(this.type='date')"
+                                   onblur="(this.type='text')" required/></td>
+                        <td>
+                            <button type="submit">Assign grade</button>
+                        </td>
+                    </form>
+                </tr>
+            </table>
         </article>
     </div>
     <footer>

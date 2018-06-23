@@ -37,7 +37,7 @@ public class StudentResource {
     @GET
     public Response getStudentList(@QueryParam("firstName") String firstName,
                                    @QueryParam("lastName") String lastName,
-                                   @QueryParam("date") Date birthday,
+                                   @QueryParam("birthday") Date birthday,
                                    @QueryParam("dateRelation") String dateRelation) {
         List<Student> students = StudentDBService.getAllStudents(firstName, lastName, birthday, dateRelation);
 
@@ -98,12 +98,11 @@ public class StudentResource {
     @RolesAllowed("lecturer")
     public Response updateStudent(@PathParam("index") long index, @NotNull Student newStudent) {
         Student oldStudent = StudentDBService.getStudent(index);
+
         if (newStudent.getGrades() == null) {
             newStudent.setGrades(new ArrayList<>());
         }
         assignCourses(newStudent);
-        if (newStudent.getGrades() == null)
-            newStudent.setGrades(new ArrayList<>());
 
         if (oldStudent != null) {
             oldStudent.setGrades(newStudent.getGrades());

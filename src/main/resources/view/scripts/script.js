@@ -72,12 +72,12 @@ var request = function (address, id) {
 
                 object.links = [];
 
-                if ($.isArray(data.link)) {
-                    data.link.forEach(function (link) {
+                if ($.isArray(data.links)) {
+                    data.links.forEach(function (link) {
                         object.links[link.params.rel] = link.href;
                     });
                 } else {
-                    object.links[data.link.params.rel] = data.link.href;
+                    object.links[data.links.params.rel] = data.links.href;
                 }
 
                 ko.computed(function () {
@@ -130,6 +130,7 @@ var request = function (address, id) {
 
     self.delete = function () {
         self.remove(this);
+        self.deleteRequest(this);
     };
 
     self.parseQuery = function () {

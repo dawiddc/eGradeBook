@@ -7,6 +7,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,11 +18,15 @@ public class CourseDBService {
         throw new IllegalStateException("Utility class");
     }
 
-    public static List<Course> getCourses(String lecturer) {
+    public static List<Course> getCourses(String lecturer, String name) {
         Query<Course> query = datastore.find(Course.class);
 
         if (lecturer != null) {
             query = query.field("lecturer").containsIgnoreCase(lecturer);
+        }
+
+        if (name != null) {
+            query = query.field("name").containsIgnoreCase(name);
         }
 
         return query.asList();
@@ -52,6 +57,9 @@ public class CourseDBService {
     public static void deleteCourse(long id) {
         Course course = getCourseById(id);
         for (Student student : StudentDBService.getAllStudents(null, null, null, null)) {
+            if (student.getGrades() == null) {
+                student.setGrades(new ArrayList<>());
+            }
             student.setGrades(student.getGrades().stream().filter(grade -> grade.getCourse().getId() != id).collect(Collectors.toList()));
             StudentDBService.updateStudent(student);
         }

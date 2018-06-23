@@ -21,7 +21,11 @@ public class Main {
     public static final String BASE_URI = "http://localhost:8080/";
 
     public static HttpServer startServer() {
-
+        try {
+            Class.forName("org.dawiddc.egradebook.dbservice.GradebookDataService");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         final ResourceConfig rc = new ResourceConfig()
                 .packages("org.dawiddc.egradebook")
                 .packages("org.glassfish.jersey.examples.linking")

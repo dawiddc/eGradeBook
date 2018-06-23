@@ -111,7 +111,7 @@ public class GradeResource {
             LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
 
-        return Response.created(url).build();
+        return Response.created(url).entity(grade).build();
     }
 
     @PUT
@@ -155,7 +155,7 @@ public class GradeResource {
                 LOGGER.log(Level.SEVERE, "URI cast Exception", e);
             }
 
-            return Response.created(url).build();
+            return Response.created(url).entity(newGrade).build();
         }
     }
 

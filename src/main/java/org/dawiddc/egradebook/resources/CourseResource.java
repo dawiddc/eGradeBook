@@ -35,8 +35,9 @@ public class CourseResource {
      * @return list of courses (filtered if lecturer is present)
      */
     @GET
-    public Response getCoursesList(@QueryParam("lecturer") String lecturer) {
-        List<Course> courses = CourseDBService.getCourses(lecturer);
+    public Response getCoursesList(@QueryParam("lecturer") String lecturer,
+                                   @QueryParam("name") String name) {
+        List<Course> courses = CourseDBService.getCourses(lecturer, name);
 
         if (courses == null || courses.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No courses found").build();
@@ -78,7 +79,7 @@ public class CourseResource {
             LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
 
-        return Response.created(url).build();
+        return Response.created(url).entity(course).build();
     }
 
 
@@ -103,15 +104,16 @@ public class CourseResource {
         } catch (URISyntaxException e) {
             LOGGER.log(Level.SEVERE, "URI cast Exception", e);
         }
-        return Response.created(url).build();
+        return Response.created(url).entity(newCourse).build();
     }
 
     @DELETE
     @Path("/{id}")
     @RolesAllowed("lecturer")
     public Response deleteCourse(@PathParam("id") long id) {
+        Course course = getCourse(id);
         CourseDBService.deleteCourse(id);
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.status(Response.Status.NO_CONTENT).entity(course).build();
     }
 
 }

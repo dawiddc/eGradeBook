@@ -189,7 +189,16 @@ table tr th.actions-col {
     color: #676962;
 }
 
+.relPic {
+    height: 0.8em;
+    width: 0.8em;
+}
+
 .lp-col {
+    text-align: center;
+}
+
+.index-col {
     text-align: center;
 }
 
