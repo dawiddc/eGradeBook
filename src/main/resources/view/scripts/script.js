@@ -90,13 +90,12 @@ var request = function (address, id) {
     };
 
     self.updateRequest = function (object) {
-        if (object['course'] != null) {
+        if (object['course'] != null || object['grade'].course != null) {
             object.course = ko.utils.arrayFirst(viewModel.courses(), function (course) {
                 if (object.course.id() === course.id()) {
                     return course;
                 }
             });
-        }
         $.ajax({
             url: backendAddress + object.links['self'],
             dataType: "json",
@@ -104,6 +103,7 @@ var request = function (address, id) {
             data: ko.mapping.toJSON(object, {ignore: ["links"]}),
             method: "PUT"
         });
+        }
     };
 
     self.deleteRequest = function (object) {

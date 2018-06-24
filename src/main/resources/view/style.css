@@ -183,6 +183,12 @@ table tr td select {
     color: inherit;
 }
 
+table tr td select option {
+    text-align: center;
+    background: #66a4c0;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
 table tr th.lp-col,
 table tr th.actions-col {
     border: none;
