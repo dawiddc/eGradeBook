@@ -119,9 +119,12 @@
             <table>
                 <thead>
                 <tr>
-                    <th><input type="text" name="course" placeholder="Course"></th>
-                    <th><input type="number" name="value" placeholder="Grade"></th>
-                    <th><input type="text" name="date" placeholder="Acquire date"></th>
+                    <th><input type="text" name="course" data-bind="textInput: viewModel.grades.queryParams.courseName"
+                               placeholder="Course"></th>
+                    <th><input type="number" name="value" data-bind="textInput: viewModel.grades.queryParams.value"
+                               placeholder="Grade"></th>
+                    <th><input type="text" name="date" onMouseOver="this.type='date'" onMouseOut="this.type='text'"
+                               placeholder="Assign date" data-bind="textInput: viewModel.grades.queryParams.date"></th>
                     <th class="actions-col">Actions</th>
                 </tr>
                 </thead>

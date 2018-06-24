@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -40,7 +41,8 @@ public class GradeResource {
     public Response getStudentGrades(@PathParam("index") long index,
                                      @QueryParam("courseName") String courseName,
                                      @QueryParam("value") Float value,
-                                     @QueryParam("valueRelation") String valueRelation) {
+                                     @QueryParam("valueRelation") String valueRelation,
+                                     @QueryParam("date") Date date) {
         Student student = StudentDBService.getStudent(index);
         if (student == null)
             throw new NotFoundException(new JsonError("Error", "Student " + index + " not found"));
@@ -52,15 +54,23 @@ public class GradeResource {
 
         /* Filtering by grade's course name */
         if (courseName != null) {
-            grades = grades.stream().filter(g -> g.getCourse().getName().equals(courseName)).collect(Collectors.toList());
+            grades = grades.stream().filter(g -> g.getCourse().getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList());
+        }
+
+        if (date != null) {
+            grades = grades.stream().filter(g -> g.getDate().equals(date)).collect(Collectors.toList());
         }
 
         /* Filtering by grade assign date */
-        if (value != null && valueRelation != null) {
-            if (valueRelation.equalsIgnoreCase("greater")) {
-                grades = grades.stream().filter(gr -> gr.getValue() > value).collect(Collectors.toList());
-            } else if (valueRelation.equalsIgnoreCase("lower")) {
-                grades = grades.stream().filter(gr -> gr.getValue() < value).collect(Collectors.toList());
+        if (value != null) {
+            if (valueRelation != null) {
+                if (valueRelation.equalsIgnoreCase("greater")) {
+                    grades = grades.stream().filter(gr -> gr.getValue() > value).collect(Collectors.toList());
+                } else if (valueRelation.equalsIgnoreCase("lower")) {
+                    grades = grades.stream().filter(gr -> gr.getValue() < value).collect(Collectors.toList());
+                }
+            } else {
+                grades = grades.stream().filter(gr -> gr.getValue() == value).collect(Collectors.toList());
             }
         }
 

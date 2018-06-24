@@ -24,6 +24,12 @@ var request = function (address, id) {
                 success: function (data) {
                     self.removeAll();
 
+                    if (!Array.isArray(data)) {
+                        var tempData = data;
+                        data = [];
+                        data.push(tempData);
+                    }
+
                     data.forEach(function (element) {
                         var object = ko.mapping.fromJS(element, {ignore: ["link"]});
                         object.links = [];
@@ -174,7 +180,7 @@ function viewModel() {
             self.students.getRelL(false);
 
             if (self.students.getRelG() === true)
-                self.students.queryParams.dateRelation("grater");
+                self.students.queryParams.dateRelation("after");
             else
                 self.students.queryParams.dateRelation("equal");
         }
@@ -188,7 +194,7 @@ function viewModel() {
             self.students.getRelG(false);
 
             if (self.students.getRelL() === true)
-                self.students.queryParams.dateRelation("lower");
+                self.students.queryParams.dateRelation("before");
             else
                 self.students.queryParams.dateRelation("equal");
         }
@@ -239,7 +245,20 @@ function viewModel() {
         $(form).each(function () {
             this.reset();
         });
-    }
+    };
+
+    self.grades.queryParams = {
+        value: ko.observable(),
+        courseName: ko.observable(),
+        date: ko.observable()
+    };
+
+    Object.keys(self.grades.queryParams).forEach(function (key) {
+        self.grades.url = backendAddress + '/students/' + self.grades.selectedStudent() + "/grades",
+            self.grades.queryParams[key].subscribe(function () {
+                self.grades.parseQuery();
+            });
+    });
 }
 
 var viewModel = new viewModel();
