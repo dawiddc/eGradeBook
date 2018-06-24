@@ -103,7 +103,7 @@ var request = function (address, id) {
                     }
                 });
             }
-            if (object['course'] != null) {
+            if (!(object.course === null)) {
                 $.ajax({
                     url: backendAddress + object.links['self'],
                     dataType: "json",
