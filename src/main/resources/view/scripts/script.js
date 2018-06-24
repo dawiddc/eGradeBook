@@ -3,142 +3,145 @@
 var backendAddress = "http://localhost:8080";
 
 var request = function (address, id) {
-    var self = ko.observableArray();
+        var self = ko.observableArray();
 
-    self.url = address;
-    self.postUrl = self.url;
+        self.url = address;
+        self.postUrl = self.url;
 
-    self.get = function (query) {
-        if (self.sub) {
-            self.sub.dispose();
-        }
+        self.get = function (query) {
+            if (self.sub) {
+                self.sub.dispose();
+            }
 
-        var url = self.url;
+            var url = self.url;
 
-        if (query)
-            url = url + query;
+            if (query)
+                url = url + query;
 
-        $.ajax({
-            dataType: "json",
-            url: url,
-            success: function (data) {
-                self.removeAll();
+            $.ajax({
+                dataType: "json",
+                url: url,
+                success: function (data) {
+                    self.removeAll();
 
-                data.forEach(function (element) {
-                    var object = ko.mapping.fromJS(element, {ignore: ["link"]});
+                    data.forEach(function (element) {
+                        var object = ko.mapping.fromJS(element, {ignore: ["link"]});
+                        object.links = [];
+
+                        if ($.isArray(element.links)) {
+                            element.links.forEach(function (link) {
+                                object.links[link.params.rel] = link.href;
+                            });
+                        } else {
+                            object.links[element.links.params.rel] = element.links.href;
+                        }
+
+                        self.push(object);
+
+                        ko.computed(function () {
+                            return ko.toJSON(object);
+                        }).subscribe(function () {
+                            self.updateRequest(object);
+                        });
+                    });
+
+                    self.sub = self.subscribe(function (changes) {
+                        changes.forEach(function (change) {
+                            if (change.status === 'added') {
+                                self.saveRequest(change.value);
+                            }
+                            if (change.status === 'deleted') {
+                                self.deleteRequest(change.value);
+                            }
+                        });
+                    }, null, "arrayChange");
+                }
+            });
+        };
+
+        self.saveRequest = function (object) {
+            $.ajax({
+                url: self.postUrl,
+                dataType: "json",
+                contentType: "application/json",
+                data: ko.mapping.toJSON(object),
+                method: "POST",
+                success: function (data) {
+                    var response = ko.mapping.fromJS(data);
+                    object[id](response[id]());
+
                     object.links = [];
 
-                    if ($.isArray(element.links)) {
-                        element.links.forEach(function (link) {
+                    if ($.isArray(data.links)) {
+                        data.links.forEach(function (link) {
                             object.links[link.params.rel] = link.href;
                         });
                     } else {
-                        object.links[element.links.params.rel] = element.links.href;
+                        object.links[data.links.params.rel] = data.links.href;
                     }
-
-                    self.push(object);
 
                     ko.computed(function () {
                         return ko.toJSON(object);
                     }).subscribe(function () {
                         self.updateRequest(object);
                     });
-                });
-
-                self.sub = self.subscribe(function (changes) {
-                    changes.forEach(function (change) {
-                        if (change.status === 'added') {
-                            self.saveRequest(change.value);
-                        }
-                        if (change.status === 'deleted') {
-                            self.deleteRequest(change.value);
-                        }
-                    });
-                }, null, "arrayChange");
-            }
-        });
-    };
-
-    self.saveRequest = function (object) {
-        $.ajax({
-            url: self.postUrl,
-            dataType: "json",
-            contentType: "application/json",
-            data: ko.mapping.toJSON(object),
-            method: "POST",
-            success: function (data) {
-                var response = ko.mapping.fromJS(data);
-                object[id](response[id]());
-
-                object.links = [];
-
-                if ($.isArray(data.links)) {
-                    data.links.forEach(function (link) {
-                        object.links[link.params.rel] = link.href;
-                    });
-                } else {
-                    object.links[data.links.params.rel] = data.links.href;
-                }
-
-                ko.computed(function () {
-                    return ko.toJSON(object);
-                }).subscribe(function () {
-                    self.updateRequest(object);
-                });
-            }
-        });
-    };
-
-    self.updateRequest = function (object) {
-        if (object['course'] != null || object['grade'].course != null) {
-            object.course = ko.utils.arrayFirst(viewModel.courses(), function (course) {
-                if (object.course.id() === course.id()) {
-                    return course;
                 }
             });
-        $.ajax({
-            url: backendAddress + object.links['self'],
-            dataType: "json",
-            contentType: "application/json",
-            data: ko.mapping.toJSON(object, {ignore: ["links"]}),
-            method: "PUT"
-        });
-        }
-    };
+        };
 
-    self.deleteRequest = function (object) {
-        $.ajax({
-            url: backendAddress + object.links['self'],
-            method: "DELETE"
-        });
-    };
+        self.updateRequest = function (object) {
+            if (object['course'] != null) {
+                object.course = ko.utils.arrayFirst(viewModel.courses(), function (course) {
+                    if (object.course.id() === course.id()) {
+                        return course;
+                    }
+                });
+            }
+            if (object['course'] != null) {
+                $.ajax({
+                    url: backendAddress + object.links['self'],
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: ko.mapping.toJSON(object, {ignore: ["links"]}),
+                    method: "PUT"
+                });
+            }
+        };
 
-    self.add = function (form) {
-        var data = {};
-        $(form).serializeArray().map(function (x) {
-            data[x.name] = x.value;
-        });
+        self.deleteRequest = function (object) {
+            $.ajax({
+                url: backendAddress + object.links['self'],
+                method: "DELETE"
+            });
+        };
 
-        data[id] = null;
-        self.push(ko.mapping.fromJS(data));
+        self.add = function (form) {
+            var data = {};
+            $(form).serializeArray().map(function (x) {
+                data[x.name] = x.value;
+            });
 
-        $(form).each(function () {
-            this.reset();
-        });
+            data[id] = null;
+            self.push(ko.mapping.fromJS(data));
 
-    };
+            $(form).each(function () {
+                this.reset();
+            });
 
-    self.delete = function () {
-        self.remove(this);
-        self.deleteRequest(this);
-    };
+        };
 
-    self.parseQuery = function () {
-        self.get('?' + $.param(ko.mapping.toJS(self.queryParams)));
-    };
+        self.delete = function () {
+            self.remove(this);
+            self.deleteRequest(this);
+        };
 
-    return self;
-};
+        self.parseQuery = function () {
+            self.get('?' + $.param(ko.mapping.toJS(self.queryParams)));
+        };
+
+        return self;
+    }
+;
 
 function viewModel() {
     var self = this;
