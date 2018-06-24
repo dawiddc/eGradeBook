@@ -34,19 +34,23 @@ public class StudentDBService {
         if (lastName != null) {
             query = query.field("lastName").containsIgnoreCase(lastName);
         }
-        if (birthday != null && dateRelation != null) {
-            switch (dateRelation.toLowerCase()) {
-                case "equal":
-                    query.filter("birthday ==", birthday);
-                    break;
-                case "after":
-                    query.filter("birthday >", birthday);
-                    break;
-                case "before":
-                    query.filter("birthday <", birthday);
-                    break;
-                default:
-                    break;
+        if (birthday != null) {
+            if (dateRelation != null) {
+                switch (dateRelation.toLowerCase()) {
+                    case "equal":
+                        query.filter("birthday ==", birthday);
+                        break;
+                    case "after":
+                        query.filter("birthday >", birthday);
+                        break;
+                    case "before":
+                        query.filter("birthday <", birthday);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                query.filter("birthday ==", birthday);
             }
         }
 

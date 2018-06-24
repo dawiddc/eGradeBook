@@ -41,7 +41,14 @@
                     <th class="birthday-col"><input data-bind="textInput: viewModel.students.queryParams.birthday"
                                                     type="text" name="birthdayColumn" placeholder="Birthday"
                                                     onfocus="(this.type='date')"
-                                                    onblur="(this.type='text')"></th>
+                                                    onblur="(this.type='text')">
+                        <img class="relPic" src="assets/up-arrow.png"/>
+                        <input class="graterCheckbox" type="checkbox" data-bind="checked: viewModel.students.getRelG"
+                               value="UP">
+                        <img class="relPic" src="assets/down-arrow.png"/>
+                        <input class="lowerCheckbox" type="checkbox" data-bind="checked: viewModel.students.getRelL"
+                               value="DOWN">
+                    </th>
 
                     <th class="actions-col">Actions</th>
                 </tr>
