@@ -24,7 +24,7 @@ public class Main {
         try {
             Class.forName("org.dawiddc.egradebook.dbservice.GradebookDataService");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Data service initialization fail", e);
         }
         final ResourceConfig rc = new ResourceConfig()
                 .packages("org.dawiddc.egradebook")

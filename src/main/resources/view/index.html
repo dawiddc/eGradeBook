@@ -43,10 +43,12 @@
                                                     onfocus="(this.type='date')"
                                                     onblur="(this.type='text')">
                         <img class="relPic" src="assets/up-arrow.png"/>
-                        <input class="graterCheckbox" type="checkbox" data-bind="checked: viewModel.students.getRelG"
+                        <input class="graterCheckbox" type="checkbox"
+                               data-bind="checked: viewModel.students.getRelationAfter"
                                value="UP">
                         <img class="relPic" src="assets/down-arrow.png"/>
-                        <input class="lowerCheckbox" type="checkbox" data-bind="checked: viewModel.students.getRelL"
+                        <input class="lowerCheckbox" type="checkbox"
+                               data-bind="checked: viewModel.students.getRelationBefore"
                                value="DOWN">
                     </th>
 

@@ -173,12 +173,12 @@ function viewModel() {
         }
     }, self);
 
-    self.students.getRelG = ko.observable();
+    self.students.getRelationAfter = ko.observable();
     self.relGTrigger = ko.computed(function () {
-        if (self.students.getRelG() !== undefined) {
-            self.students.getRelL(false);
+        if (self.students.getRelationAfter() !== undefined) {
+            self.students.getRelationBefore(false);
 
-            if (self.students.getRelG() === true)
+            if (self.students.getRelationAfter() === true)
                 self.students.queryParams.dateRelation("after");
             else
                 self.students.queryParams.dateRelation("equal");
@@ -187,12 +187,12 @@ function viewModel() {
             self.students.queryParams.dateRelation("equal");
     }, self);
 
-    self.students.getRelL = ko.observable();
+    self.students.getRelationBefore = ko.observable();
     self.relLTrigger = ko.computed(function () {
-        if (self.students.getRelL() !== undefined) {
-            self.students.getRelG(false);
+        if (self.students.getRelationBefore() !== undefined) {
+            self.students.getRelationAfter(false);
 
-            if (self.students.getRelL() === true)
+            if (self.students.getRelationBefore() === true)
                 self.students.queryParams.dateRelation("before");
             else
                 self.students.queryParams.dateRelation("equal");
