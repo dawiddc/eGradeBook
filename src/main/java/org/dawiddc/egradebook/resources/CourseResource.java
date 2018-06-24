@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +41,7 @@ public class CourseResource {
         List<Course> courses = CourseDBService.getCourses(lecturer, name);
 
         if (courses == null || courses.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No courses found").build();
+            courses = new ArrayList<>();
         }
 
         GenericEntity<List<Course>> entity = new GenericEntity<List<Course>>(Lists.newArrayList(courses)) {

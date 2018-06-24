@@ -42,7 +42,7 @@ public class StudentResource {
         List<Student> students = StudentDBService.getAllStudents(firstName, lastName, birthday, dateRelation);
 
         if ((students == null || students.isEmpty())) {
-            throw new NotFoundException(new JsonError("Error", "Student list is empty"));
+            students = new ArrayList<>();
         }
 
         GenericEntity<List<Student>> entity = new GenericEntity<List<Student>>(Lists.newArrayList(students)) {
